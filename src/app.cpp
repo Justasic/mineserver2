@@ -37,7 +37,7 @@
 #include <mineserver/game.h>
 #include <mineserver/world.h>
 #include <mineserver/world/generator.h>
-#include <mineserver/world/generator/flatlands.h>
+#include <mineserver/world/generator/mapgen.h>
 #include <mineserver/network/protocol/notch/protocol.h>
 #include <mineserver/network/server.h>
 
@@ -48,7 +48,7 @@ int main()
   Mineserver::Game::pointer_t game = boost::make_shared<Mineserver::Game>();
 
   game->setWorld(0, boost::make_shared<Mineserver::World>());
-  game->getWorld(0)->addGenerator(boost::make_shared<Mineserver::World_Generator_Flatlands>());
+  game->getWorld(0)->addGenerator(boost::make_shared<Mineserver::mapGen>());
 
   game->addMessageWatcher(0x00, boost::bind(&Mineserver::Game::messageWatcherKeepAlive, game, _1, _2, _3));
   game->addMessageWatcher(0x01, boost::bind(&Mineserver::Game::messageWatcherLogin, game, _1, _2, _3));

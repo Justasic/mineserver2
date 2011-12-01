@@ -25,9 +25,11 @@ long mapGen::randFromSeed()
   return (seed >> 16) & 0x7FFF;
 }
 
-bool mapGen::processChunk(Mineserver::World_Chunk::pointer_t chunk)
+bool mapGen::processChunk(Mineserver::World_Chunk::pointer_t chunk,int32_t chunkX, int32_t chunkZ)
 {
   uint8_t blockType;
+
+  std::cout << "chunk X:" << chunkX << " chunk Z:" << chunkZ << std::endl;
 
   for (uint8_t y=0;y<=127;++y) {
     switch (y)

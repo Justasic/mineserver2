@@ -40,7 +40,7 @@ namespace Mineserver
     typedef boost::shared_ptr<Mineserver::World_Generator> pointer_t;
 
   public:
-    virtual bool processChunk(Mineserver::World_Chunk::pointer_t chunk) = 0;
+    virtual bool processChunk(Mineserver::World_Chunk::pointer_t chunk,int32_t chunkX,int32_t chunkZ) = 0;
   };
 }
 

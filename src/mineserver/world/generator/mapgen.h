@@ -21,6 +21,7 @@ namespace Mineserver
 
     void initialize(long tempSeed);
     long randFromSeed();
-    bool processChunk(Mineserver::World_Chunk::pointer_t chunk);
+    //chunkX and chunkZ are for libnoise so i can generate the landscape in the right place
+    bool processChunk(Mineserver::World_Chunk::pointer_t chunk,int32_t chunkX, int32_t chunkZ);
   };
 }

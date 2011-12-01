@@ -148,6 +148,8 @@ namespace Mineserver
       m_chunks[std::make_pair(x,z)] = chunk;
     }
 
+    //Is the chunk position ment to be unsigned, it just looks a bit odd when i used the
+    //coordinates for libnoise. I will make them signed when they are passed to processChunk
     Mineserver::World_Chunk::pointer_t generateChunk(uint32_t x, uint32_t z)
     {
       if (!hasChunk(x, z)) {
@@ -157,7 +159,7 @@ namespace Mineserver
         chunk->z = z;
 
         for (generatorList_t::const_iterator it = m_generators.begin(); it != m_generators.end(); ++it) {
-          (*it)->processChunk(chunk);
+          (*it)->processChunk(chunk,x,z);
         }
 
         setChunk(x, z, chunk);
@@ -165,7 +167,7 @@ namespace Mineserver
 
       return getChunk(x, z);
     }
-    
+
     void addGenerator(Mineserver::World_Generator::pointer_t generator)
     {
       m_generators.push_back(generator);

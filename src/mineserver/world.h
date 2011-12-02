@@ -35,6 +35,8 @@
 
 #include <mineserver/world/chunk.h>
 #include <mineserver/world/generator.h>
+#include <mineserver/world/generator/terrain.h>
+#include <mineserver/world.h>
 
 namespace Mineserver
 {
@@ -88,6 +90,7 @@ namespace Mineserver
     typedef boost::shared_ptr<Mineserver::World> pointer_t;
     typedef std::map<std::pair<uint32_t,uint32_t>, Mineserver::World_Chunk::pointer_t> chunkList_t;
     typedef std::vector<Mineserver::World_Generator::pointer_t> generatorList_t;
+    typedef std::vector<Mineserver::terrainGen::pointer_t> terrainList_t;
 
     // Jailout2000: Are enums okay to use here?
     // If these enums stay, plugins will need access to them. (TODO)
@@ -112,7 +115,7 @@ namespace Mineserver
   private:
     chunkList_t m_chunks;
     generatorList_t m_generators;
-
+    terrainList_t m_terrain;
     long m_worldSeed;
     GameMode m_gameMode;
     Dimension m_dimension;
@@ -148,7 +151,7 @@ namespace Mineserver
       m_chunks[std::make_pair(x,z)] = chunk;
     }
 
-    //Is the chunk position ment to be unsigned, it just looks a bit odd when i used the
+    //Are the chunk coords ment to be unsigned, it just looks a bit odd when i used the
     //coordinates for libnoise. I will make them signed when they are passed to processChunk
     Mineserver::World_Chunk::pointer_t generateChunk(uint32_t x, uint32_t z)
     {
@@ -171,6 +174,14 @@ namespace Mineserver
     void addGenerator(Mineserver::World_Generator::pointer_t generator)
     {
       m_generators.push_back(generator);
+    }
+
+    void addTerrain(Mineserver::terrainGen::pointer_t terrain)
+    {
+      m_terrain.push_back(terrain);
+
+      //NOTE: This last bit is just temperary, multiworld support will be added.
+      m_terrain[0]->init(m_worldSeed);
     }
 
     long getWorldSeed() { return m_worldSeed; }

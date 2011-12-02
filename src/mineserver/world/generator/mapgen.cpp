@@ -11,26 +11,11 @@ Also i hope to have this generation multithreaded
 #include <mineserver/world/chunk.h>
 #include <mineserver/world/generator/mapgen.h>
 
-using namespace Mineserver;
-
-void mapGen::initialize(long tempSeed)
-{
-  seed = tempSeed;
-  long realSeed = tempSeed;
-}
-
-long mapGen::randFromSeed()
-{
-  seed = (214013 * seed + 2531011);
-  return (seed >> 16) & 0x7FFF;
-}
-
-bool mapGen::processChunk(Mineserver::World_Chunk::pointer_t chunk,int32_t chunkX, int32_t chunkZ)
+bool Mineserver::mapGen::processChunk(Mineserver::World_Chunk::pointer_t chunk,int32_t chunkX, int32_t chunkZ)
 {
   uint8_t blockType;
 
-  std::cout << "chunk X:" << chunkX << " chunk Z:" << chunkZ << std::endl;
-
+  //Just temporary
   for (uint8_t y=0;y<=127;++y) {
     switch (y)
     {

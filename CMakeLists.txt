@@ -72,7 +72,6 @@ SET(mineserver_source
   src/mineserver/network/client.cpp
   src/mineserver/world/generator/mapgen.cpp
   src/mineserver/world/generator/terrain.cpp
-  src/mineserver/world/generator/writechunk.cpp
   src/mineserver/world/generator/boime.cpp
   src/mineserver/world/generator/cavegen.cpp
   src/mineserver/world/generator/objectgen.cpp

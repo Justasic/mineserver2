@@ -86,7 +86,7 @@ void Mineserver::Game::run()
         Mineserver::Game_Player::pointer_t player(m_clientMap[client]);
         int remaining = 0;
         int dbg = 0;
-    
+
         std::cout << " player had " << m_playerMap[player].size() << " clients" << std::endl;
         m_playerMap[player].erase(std::remove(m_playerMap[player].begin(), m_playerMap[player].end(), client), m_playerMap[player].end());
         std::cout << " player has " << m_playerMap[player].size() << " clients" << std::endl;
@@ -249,7 +249,7 @@ void Mineserver::Game::messageWatcherLogin(Mineserver::Game::pointer_t game, Min
   boost::shared_ptr<Mineserver::Network_Message_Login> loginMessage = boost::make_shared<Mineserver::Network_Message_Login>();
   loginMessage->mid = 0x01;
   loginMessage->version = 22;
-  loginMessage->seed = world->getWorldSeed();
+  loginMessage->seed = 0;//Changed this to 0 because I think it removes client side boimes - not 100% sure though.
   loginMessage->mode = world->getGameMode();
   loginMessage->dimension = world->getDimension();
   loginMessage->difficulty = world->getDifficulty();
@@ -408,7 +408,7 @@ void Mineserver::Game::messageWatcherDigging(Mineserver::Game::pointer_t game, M
     Mineserver::World_Chunk::pointer_t chunk = world->getChunk(chunk_x, chunk_z);
     Mineserver::World_ChunkPosition cPosition = Mineserver::World_ChunkPosition(msg->x & 15, msg->y, msg->z & 15);
     Mineserver::WorldBlockPosition wPosition = Mineserver::WorldBlockPosition(msg->x, msg->y, msg->z);
-    
+
     uint8_t type = chunk->getBlockType(cPosition.x, cPosition.y, cPosition.z);
 
     if (type != 0x07) // if type is not bedrock
@@ -545,7 +545,7 @@ void Mineserver::Game::messageWatcherServerListPing(Mineserver::Game::pointer_t 
 
   boost::shared_ptr<Mineserver::Network_Message_Kick> response = boost::make_shared<Mineserver::Network_Message_Kick>();
   response->mid = 0xFF;
-  response->reason = reason.str(); 
+  response->reason = reason.str();
   client->outgoing().push_back(response);
 }
 
@@ -650,7 +650,7 @@ bool Mineserver::Game::movementPostWatcher(Mineserver::Game::pointer_t game, Min
     std::cout << " [" << other->getEid() << "] distance to [" << player->getEid() << "]: " << new_distance << std::endl;
     if(others.count(other->getEid()) >= 1) {  // we are in range of this one
       if(new_distance > out_distance) { // but now we are out
-        // send destroy entity 
+        // send destroy entity
         boost::shared_ptr<Mineserver::Network_Message_DestroyEntity> destroyEntity = boost::make_shared<Mineserver::Network_Message_DestroyEntity>();
         destroyEntity->mid = 0x1D;
         destroyEntity->entityId = player->getEid();
@@ -669,7 +669,7 @@ bool Mineserver::Game::movementPostWatcher(Mineserver::Game::pointer_t game, Min
         // remove player from set
         others.erase(other->getEid());
       } else { // still range
-        // update entity position => send 
+        // update entity position => send
         for(clientList_t::iterator it=other_clients.begin();it != other_clients.end(); it++) {
             (*it)->outgoing().push_back(player_move);
         }

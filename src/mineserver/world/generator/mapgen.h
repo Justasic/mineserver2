@@ -5,7 +5,6 @@ should keep everything together*/
 
 #include <boost/shared_ptr.hpp>
 
-#include <mineserver/world/generator/writechunk.h>
 #include <mineserver/world/generator/terrain.h>
 #include <mineserver/world/chunk.h>
 #include <mineserver/world/generator.h>

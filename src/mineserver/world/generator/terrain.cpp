@@ -6,6 +6,7 @@ ect. I am going to use libnoise for now.*/
 
 bool worldGeneration::terrainGen::noiseInit(long seed)
 {
+  seed = 21;
   mountainTerrain.SetSeed(seed);
   mountainTerrain.SetFrequency(0.005);
   mountainTerrain.SetOctaveCount(5);
@@ -20,8 +21,8 @@ bool worldGeneration::terrainGen::noiseInit(long seed)
   baseFlatTerrain.SetPersistence(0.5);
 
   flatTerrain.SetSourceModule(0, baseFlatTerrain);
-  flatTerrain.SetScale(0.125);
-  flatTerrain.SetBias(0.05);
+  flatTerrain.SetScale(-1.0);
+  flatTerrain.SetBias(- (1.0 / 128) * 13);
 
   terrainType.SetSeed(seed);
   terrainType.SetFrequency(0.005);

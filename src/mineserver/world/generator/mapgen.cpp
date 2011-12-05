@@ -37,7 +37,7 @@ void Mineserver::mapGen::writeLandscape()
       blockType = 0x07; //bedrock
       bWater = false;
 
-      if(heightMap[x][z] < 0){heightMap[x][z] = 0;}
+      if(heightMap[x][z] < 1){heightMap[x][z] = 1;}
       else if(heightMap[x][z] > 127){heightMap[x][z] = 127;}
 
       for(uint8_t y=0;y<128;y++)

@@ -45,6 +45,7 @@
 #include <mineserver/network/message/orientation.h>
 #include <mineserver/network/message/positionandorientation.h>
 #include <mineserver/network/message/namedentityspawn.h>
+#include <mineserver/network/message/mobspawn.h>
 #include <mineserver/network/message/destroyentity.h>
 #include <mineserver/network/message/entityteleport.h>
 #include <mineserver/network/message/entitylook.h>
@@ -172,8 +173,72 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
 
   const Mineserver::Network_Message_Chat* msg = reinterpret_cast<Mineserver::Network_Message_Chat*>(&(*message));
 
-  chatPostWatcher(shared_from_this(), getPlayerForClient(client), msg->message);
-}
+  //process the chat message to see if it's a command and transfer it to the parser
+  std::string command = msg->message;
+  if(command[0] == '/')
+  {
+    std::cout << "Player Command <" << player->getName() << ">: " << command << std::endl;
+    if (command == "/say hi")
+    {
+      Mineserver::Network_Client::pointer_t cclient = client;
+      boost::shared_ptr<Mineserver::Network_Message_Chat> chatMessage = boost::make_shared<Mineserver::Network_Message_Chat>();
+      chatMessage->mid = 0x03;
+      chatMessage->message += "§5";
+      chatMessage->message += "[Server] Hi this is a test message.";
+      for (clientList_t::iterator it = m_clients.begin(); it != m_clients.end(); ++it) 
+      {
+        (*it)->outgoing().push_back(chatMessage);
+      }//end of sending message to all the clients
+    } //end of test broadcast command
+    
+    if (command == "/cow") {
+      for (int r = 0; r <=10; r++){
+        std::cout << "Attempting to spawn a cow." << std::endl;
+        boost::shared_ptr<Mineserver::Network_Message_MobSpawn> MobSpawn = boost::make_shared<Mineserver::Network_Message_MobSpawn>();
+        MobSpawn->mid = 0x18;
+        MobSpawn->entityId = 1034;
+        MobSpawn->type = 92; //a cow
+        MobSpawn->x = 0;
+        MobSpawn->y = 56;
+        MobSpawn->z = 0;
+        MobSpawn->yaw = 0;
+        MobSpawn->pitch = 0;
+        MobSpawn->data; //just trying to copy the metadata bits for a cow.
+        MobSpawn->data.push_back(0x00);
+        MobSpawn->data.push_back(0x00);
+        MobSpawn->data.push_back(0x21);
+        MobSpawn->data.push_back(0x01);
+        MobSpawn->data.push_back(0x2c);
+        MobSpawn->data.push_back(0x48);
+        MobSpawn->data.push_back(0x00);
+        MobSpawn->data.push_back(0x00);
+        MobSpawn->data.push_back(0x00);
+        MobSpawn->data.push_back(0x00);
+        MobSpawn->data.push_back(0x4c);
+        MobSpawn->data.push_back(0x00);
+        MobSpawn->data.push_back(0x00);
+        MobSpawn->data.push_back(0x00);
+        MobSpawn->data.push_back(0x00);
+        boost::shared_ptr<Mineserver::Network_Message_EntityVelocity> EntityVelocity = boost::make_shared<Mineserver::Network_Message_EntityVelocity>();
+        EntityVelocity->mid = 0x1c;
+        EntityVelocity->entityId = 1034;
+        EntityVelocity->velocityX = 219;
+        EntityVelocity->velocityY = 0;
+        EntityVelocity->velocityZ = 273;
+        for (clientList_t::iterator it = m_clients.begin(); it != m_clients.end(); ++it) 
+        {
+          (*it)->outgoing().push_back(MobSpawn);
+          (*it)->outgoing().push_back(EntityVelocity);
+        }
+      }//end of for irteratiaj blblblaBggg
+    }//end of command check
+    
+    else
+    {
+      chatPostWatcher(shared_from_this(), getPlayerForClient(client), msg->message);
+    }
+  }
+}//???
 
 void Mineserver::Game::messageWatcherLogin(Mineserver::Game::pointer_t game, Mineserver::Network_Client::pointer_t client, Mineserver::Network_Message::pointer_t message)
 {

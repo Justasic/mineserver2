@@ -46,6 +46,8 @@
 #include <mineserver/network/message/positionandorientation.h>
 #include <mineserver/network/message/namedentityspawn.h>
 #include <mineserver/network/message/mobspawn.h>
+#include <mineserver/network/message/pickupspawn.h>
+#include <mineserver/network/message/entityvelocity.h>
 #include <mineserver/network/message/destroyentity.h>
 #include <mineserver/network/message/entityteleport.h>
 #include <mineserver/network/message/entitylook.h>
@@ -175,12 +177,14 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
 
   //process the chat message to see if it's a command and transfer it to the parser
   std::string command = msg->message;
+  Mineserver::Network_Client::pointer_t cclient = client;
+  Mineserver::Game_Player::pointer_t player = getPlayerForClient(client);
   if(command[0] == '/')
   {
     std::cout << "Player Command <" << player->getName() << ">: " << command << std::endl;
     if (command == "/say hi")
     {
-      Mineserver::Network_Client::pointer_t cclient = client;
+      
       boost::shared_ptr<Mineserver::Network_Message_Chat> chatMessage = boost::make_shared<Mineserver::Network_Message_Chat>();
       chatMessage->mid = 0x03;
       chatMessage->message += "§5";
@@ -230,15 +234,38 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
           (*it)->outgoing().push_back(MobSpawn);
           (*it)->outgoing().push_back(EntityVelocity);
         }
-      }//end of for irteratiaj blblblaBggg
-    }//end of command check
+      }
+    }//end of /cow
+    
+    if (command == "/dirt")
+    {
+      boost::shared_ptr<Network_Message_PickupSpawn> PickupSpawn = boost::make_shared<Mineserver::Network_Message_PickupSpawn>();
+      PickupSpawn->mid = 0x15;
+      PickupSpawn->entityId = 1453; //random number out of my head;
+      PickupSpawn->itemId = 0x03; //dirt;
+      PickupSpawn->count = 10;
+      //PickupSpawn->data = 0; //wtf?
+      PickupSpawn->x = 1;
+      PickupSpawn->y = 65;
+      PickupSpawn->z = 1;
+      PickupSpawn->rotation = 252;
+      PickupSpawn->pitch = 25;
+      PickupSpawn->roll = 12;
+      
+      for (clientList_t::iterator it = m_clients.begin(); it != m_clients.end(); ++it) 
+        {
+          (*it)->outgoing().push_back(PickupSpawn);
+        }
+      
+    }
+    
     
     else
     {
       chatPostWatcher(shared_from_this(), getPlayerForClient(client), msg->message);
     }
-  }
-}//???
+  }//end of if /command
+}//end of chat watcher
 
 void Mineserver::Game::messageWatcherLogin(Mineserver::Game::pointer_t game, Mineserver::Network_Client::pointer_t client, Mineserver::Network_Message::pointer_t message)
 {

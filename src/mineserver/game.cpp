@@ -259,6 +259,18 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
       
     }
     
+    if (command == "/kickall")
+    {
+      boost::shared_ptr<Network_Message_Kick> Kickall = boost::make_shared<Mineserver::Network_Message_Kick>();
+      Kickall->mid = 0xFF;
+      Kickall->reason = "§eEveryone was kicked from the server!";
+      for (clientList_t::iterator it = m_clients.begin(); it != m_clients.end(); ++it) 
+      {
+        (*it)->outgoing().push_back(Kickall);
+      }
+      
+    }
+    
     
     else
     {

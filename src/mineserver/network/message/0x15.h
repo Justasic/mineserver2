@@ -44,7 +44,7 @@ namespace Mineserver
     int32_t z;
     int8_t rotation;
     int8_t pitch;
-    int16_t currentItem;
+    int8_t roll;
   };
 }
 

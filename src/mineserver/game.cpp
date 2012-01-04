@@ -47,6 +47,7 @@
 #include <mineserver/network/message/namedentityspawn.h>
 #include <mineserver/network/message/mobspawn.h>
 #include <mineserver/network/message/pickupspawn.h>
+#include <mineserver/network/message/entity.h>
 #include <mineserver/network/message/entityvelocity.h>
 #include <mineserver/network/message/destroyentity.h>
 #include <mineserver/network/message/entityteleport.h>
@@ -205,20 +206,20 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
         MobSpawn->x = 0;
         MobSpawn->y = 56;
         MobSpawn->z = 0;
-        MobSpawn->yaw = 0;
-        MobSpawn->pitch = 0;
-        MobSpawn->data; //just trying to copy the metadata bits for a cow.
-        MobSpawn->data.push_back(0x00);
-        MobSpawn->data.push_back(0x00);
-        MobSpawn->data.push_back(0x21);
-        MobSpawn->data.push_back(0x01);
+        MobSpawn->yaw = 10;
+        MobSpawn->pitch = 15;
+        MobSpawn->data; //just trying to copy the metadata bits for a cow. A raw messy byte array.
+        MobSpawn->data.push_back(0x00); //type byte, index 0
+        MobSpawn->data.push_back(0x00); //boolean flags for fire, drowning, eating etc
+        MobSpawn->data.push_back(0x21); //type short, index 1
+        MobSpawn->data.push_back(0x01); //drowning counter. http://wiki.vg/Entities#Index_1.2C_short:_Drowning_counter
         MobSpawn->data.push_back(0x2c);
-        MobSpawn->data.push_back(0x48);
+        MobSpawn->data.push_back(0x48); //int index 8 - potion effects(colour)
         MobSpawn->data.push_back(0x00);
         MobSpawn->data.push_back(0x00);
         MobSpawn->data.push_back(0x00);
         MobSpawn->data.push_back(0x00);
-        MobSpawn->data.push_back(0x4c);
+        MobSpawn->data.push_back(0x4c); //int index 12 - mob age. baby animails start at -23999
         MobSpawn->data.push_back(0x00);
         MobSpawn->data.push_back(0x00);
         MobSpawn->data.push_back(0x00);
@@ -239,22 +240,34 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
     
     if (command == "/dirt")
     {
+      boost::shared_ptr<Network_Message_Entity> Entity = boost::make_shared<Mineserver::Network_Message_Entity>();
       boost::shared_ptr<Network_Message_PickupSpawn> PickupSpawn = boost::make_shared<Mineserver::Network_Message_PickupSpawn>();
+      Entity->mid = 0x1e;
+      Entity->entityId = 1453;
       PickupSpawn->mid = 0x15;
       PickupSpawn->entityId = 1453; //random number out of my head;
-      PickupSpawn->itemId = 0x03; //dirt;
-      PickupSpawn->count = 10;
-      //PickupSpawn->data = 0; //wtf?
+      PickupSpawn->itemId = 3; //dirt;
+      PickupSpawn->count = 1;
+      PickupSpawn->data = 0; //is this needed for dirt?
       PickupSpawn->x = 1;
       PickupSpawn->y = 65;
       PickupSpawn->z = 1;
-      PickupSpawn->rotation = 252;
-      PickupSpawn->pitch = 25;
-      PickupSpawn->roll = 12;
+      PickupSpawn->rotation = 26;
+      PickupSpawn->pitch = 20;
+      PickupSpawn->roll = 8;
       
+      //send the entity velocity
+      boost::shared_ptr<Mineserver::Network_Message_EntityVelocity> PickupVelocity = boost::make_shared<Mineserver::Network_Message_EntityVelocity>();
+      PickupVelocity->mid = 0x1c;
+      PickupVelocity->entityId = 1453;
+      PickupVelocity->velocityX = 1000;
+      PickupVelocity->velocityY = 3344;
+      PickupVelocity->velocityZ = 3434;
       for (clientList_t::iterator it = m_clients.begin(); it != m_clients.end(); ++it) 
         {
+          (*it)->outgoing().push_back(Entity);
           (*it)->outgoing().push_back(PickupSpawn);
+          (*it)->outgoing().push_back(PickupVelocity);
         }
       
     }
@@ -263,7 +276,7 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
     {
       boost::shared_ptr<Network_Message_Kick> Kickall = boost::make_shared<Mineserver::Network_Message_Kick>();
       Kickall->mid = 0xFF;
-      Kickall->reason = "§eEveryone was kicked from the server!";
+      Kickall->reason = "§4Everyone was kicked from the server!";
       for (clientList_t::iterator it = m_clients.begin(); it != m_clients.end(); ++it) 
       {
         (*it)->outgoing().push_back(Kickall);
@@ -272,11 +285,12 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
     }
     
     
-    else
-    {
-      chatPostWatcher(shared_from_this(), getPlayerForClient(client), msg->message);
-    }
+
   }//end of if /command
+  else
+  {
+    chatPostWatcher(shared_from_this(), getPlayerForClient(client), msg->message);
+  }
 }//end of chat watcher
 
 void Mineserver::Game::messageWatcherLogin(Mineserver::Game::pointer_t game, Mineserver::Network_Client::pointer_t client, Mineserver::Network_Message::pointer_t message)

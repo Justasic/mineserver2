@@ -217,7 +217,7 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
 
       boost::shared_ptr<Mineserver::Network_Message_Chat> chatMessage = boost::make_shared<Mineserver::Network_Message_Chat>();
       chatMessage->mid = 0x03;
-      chatMessage->message += "§5";
+      chatMessage->message += "¤5";
       chatMessage->message += "[Server]";
       for (std::vector<std::string>::iterator sayIt = args.begin() + 1; sayIt != args.end(); ++sayIt)
       {
@@ -316,7 +316,7 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
     {
       boost::shared_ptr<Network_Message_Kick> KickMessage = boost::make_shared<Mineserver::Network_Message_Kick>();
       KickMessage->mid = 0xFF;
-      KickMessage->reason = "§4Everyone was kicked from the server!";
+      KickMessage->reason = "¤4Everyone was kicked from the server!";
       //send the kick packet to all clients.
       for (clientList_t::iterator it = m_clients.begin(); it != m_clients.end(); ++it)
       {
@@ -382,7 +382,7 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
           boost::shared_ptr<Mineserver::Network_Message_Chat> privateChatMessage = boost::make_shared<Mineserver::Network_Message_Chat>();
           privateChatMessage->mid = 0x03;
           privateChatMessage->message += sender;
-          privateChatMessage->message += "§8 -> ";
+          privateChatMessage->message += "¤8 -> ";
           privateChatMessage->message += message;
           (*playerIt)->outgoing().push_back(privateChatMessage);
           sentMessage = true;
@@ -393,7 +393,7 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
       if (!sentMessage) {
         boost::shared_ptr<Mineserver::Network_Message_Chat> privateChatMessageFail = boost::make_shared<Mineserver::Network_Message_Chat>();
         privateChatMessageFail->mid = 0x03;
-        privateChatMessageFail->message = "§cCould not find player: " + playername;
+        privateChatMessageFail->message = "¤Could not find player: " + playername;
         client->outgoing().push_back(privateChatMessageFail);      }
 
     }// end of private message commands
@@ -428,7 +428,7 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
       {
         boost::shared_ptr<Mineserver::Network_Message_Chat> tposMessageFail = boost::make_shared<Mineserver::Network_Message_Chat>();
         tposMessageFail->mid = 0x03;
-        tposMessageFail->message = "§cCorrect Usage: /tpc or /pos <x> <y> <z> *Use Interger values only*";
+        tposMessageFail->message = "¤Correct Usage: /tpc or /pos <x> <y> <z> *Use Interger values only*";
         client->outgoing().push_back(tposMessageFail);
       }
     }
@@ -465,7 +465,7 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
         {
           boost::shared_ptr<Mineserver::Network_Message_Chat> tphereTeleportMessageFail = boost::make_shared<Mineserver::Network_Message_Chat>();
           tphereTeleportMessageFail->mid = 0x03;
-          tphereTeleportMessageFail->message = "§cTphere: Could not find player: " + tpherePlayerName;
+          tphereTeleportMessageFail->message = "¤Tphere: Could not find player: " + tpherePlayerName;
           client->outgoing().push_back(tphereTeleportMessageFail);
         }
       }
@@ -473,7 +473,7 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
       {
         boost::shared_ptr<Mineserver::Network_Message_Chat> tphereTeleportMessageFail = boost::make_shared<Mineserver::Network_Message_Chat>();
         tphereTeleportMessageFail->mid = 0x03;
-        tphereTeleportMessageFail->message = "§cCorrect Usage: /s or /tphere <playername>";
+        tphereTeleportMessageFail->message = "¤Correct Usage: /s or /tphere <playername>";
         client->outgoing().push_back(tphereTeleportMessageFail);
       }
     }
@@ -485,7 +485,7 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
       helpOptions.push_back("/kickall - Kick all players from the server");
       helpOptions.push_back("/t or /msg <playername> <message> - send a private message");
       helpOptions.push_back("/tp <player> - Teleport to a player");
-      helpOptions.push_back("/say <message> - Broadcast a §5[Server]§c message");
+      helpOptions.push_back("/say <message> - Broadcast a ¤5[Server]¤ message");
       helpOptions.push_back("/time <day/night> - Change the world time. Affects all players");
       helpOptions.push_back("/tpc or /pos <x> <y> <z> - Teleport to exact coordinates");
       helpOptions.push_back("/list - list players online. You can also use TAB");
@@ -494,7 +494,7 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
       for (std::vector<std::string>::iterator helpIt = helpOptions.begin(); helpIt != helpOptions.end(); ++helpIt) {
         boost::shared_ptr<Mineserver::Network_Message_Chat> chatMessageHelp = boost::make_shared<Mineserver::Network_Message_Chat>();
         chatMessageHelp->mid = 0x03;
-        chatMessageHelp->message += "§c";
+        chatMessageHelp->message += "¤";
         chatMessageHelp->message += *helpIt;
         client->outgoing().push_back(chatMessageHelp);
       }
@@ -528,7 +528,7 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
       {
         boost::shared_ptr<Mineserver::Network_Message_Chat> teleportChatMessageFail = boost::make_shared<Mineserver::Network_Message_Chat>();
         teleportChatMessageFail->mid = 0x03;
-        teleportChatMessageFail->message = "§cCould not find player: " + teleportToPlayer;
+        teleportChatMessageFail->message = "¤Could not find player: " + teleportToPlayer;
         client->outgoing().push_back(teleportChatMessageFail);
       }
 
@@ -691,7 +691,7 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
     {
       boost::shared_ptr<Mineserver::Network_Message_Chat> chatMessageError = boost::make_shared<Mineserver::Network_Message_Chat>();
       chatMessageError->mid = 0x03;
-      chatMessageError->message = "§cUnknown command. Try /help for a list.";
+      chatMessageError->message = "¤Unknown command. Try /help for a list.";
       client->outgoing().push_back(chatMessageError);
     }
 
@@ -821,7 +821,7 @@ void Mineserver::Game::messageWatcherLogin(Mineserver::Game::pointer_t game, Min
     cclient->outgoing().push_back(playerListItemMessage);
     boost::shared_ptr<Mineserver::Network_Message_Chat> chatMessage = boost::make_shared<Mineserver::Network_Message_Chat>();
     chatMessage->mid = 0x03;
-    chatMessage->message += "§e";
+    chatMessage->message += "¤e";
     chatMessage->message += msg->username;
     chatMessage->message += " joined the game.";
     cclient->outgoing().push_back(chatMessage);
@@ -1068,7 +1068,7 @@ void Mineserver::Game::messageWatcherServerListPing(Mineserver::Game::pointer_t 
   std::cout << "ServerListPing watcher called!" << std::endl;
 
   std::stringstream reason;
-  reason << "Mineserver 2.0§" << game->countPlayers() << "§" << 32; // TODO: Get max players
+  reason << "Mineserver 2.0¤" << game->countPlayers() << "¤" << 32; // TODO: Get max players
 
   boost::shared_ptr<Mineserver::Network_Message_Kick> response = boost::make_shared<Mineserver::Network_Message_Kick>();
   response->mid = 0xFF;
@@ -1294,7 +1294,7 @@ void Mineserver::Game::leavingPostWatcher(Mineserver::Game::pointer_t game, Mine
     cclient->outgoing().push_back(playerListItemMessage);
     boost::shared_ptr<Mineserver::Network_Message_Chat> chatMessage = boost::make_shared<Mineserver::Network_Message_Chat>();
     chatMessage->mid = 0x03;
-    chatMessage->message += "§e";
+    chatMessage->message += "¤e";
     chatMessage->message += player->getName();
     chatMessage->message += " left the game.";
     cclient->outgoing().push_back(chatMessage);

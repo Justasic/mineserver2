@@ -428,7 +428,7 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
       {
         boost::shared_ptr<Mineserver::Network_Message_Chat> tposMessageFail = boost::make_shared<Mineserver::Network_Message_Chat>();
         tposMessageFail->mid = 0x03;
-        tposMessageFail->message = "§cCorrect Usage: /tpc or /pos <x> <y> <z> *Use Interger values only*";
+        tposMessageFail->message = "§cCorrect Usage: /tpc or /pos <x> <y> <z>";
         client->outgoing().push_back(tposMessageFail);
       }
     }
@@ -546,7 +546,7 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
       else {
         boost::shared_ptr<Mineserver::Network_Message_Chat> timeChangeMessageFail = boost::make_shared<Mineserver::Network_Message_Chat>();
         timeChangeMessageFail->mid = 0x03;
-        timeChangeMessageFail->message = "Correct Usage: /time <day/night>";
+        timeChangeMessageFail->message = "§cCorrect Usage: /time <day/night>";
         client->outgoing().push_back(timeChangeMessageFail);
       }
       
@@ -597,7 +597,7 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
       {
         boost::shared_ptr<Mineserver::Network_Message_Chat> gamemodeChangeFail = boost::make_shared<Mineserver::Network_Message_Chat>();
         gamemodeChangeFail->mid = 0x03;
-        gamemodeChangeFail->message = "Correct Usage: /gamemode <0/1>";
+        gamemodeChangeFail->message = "§cCorrect Usage: /gamemode <0/1>";
         client->outgoing().push_back(gamemodeChangeFail);
       }
       
@@ -662,7 +662,7 @@ void Mineserver::Game::messageWatcherChat(Mineserver::Game::pointer_t game, Mine
         {
           boost::shared_ptr<Mineserver::Network_Message_Chat> chunkDataFail = boost::make_shared<Mineserver::Network_Message_Chat>();
           chunkDataFail->mid = 0x03;
-          chunkDataFail->message = "Correct Usage: /chunkdata <x> <z>";
+          chunkDataFail->message = "§cCorrect Usage: /chunkdata <x> <z>";
           client->outgoing().push_back(chunkDataFail);
         }
       }
@@ -823,7 +823,7 @@ void Mineserver::Game::messageWatcherLogin(Mineserver::Game::pointer_t game, Min
     chatMessage->mid = 0x03;
     chatMessage->message += "§e";
     chatMessage->message += msg->username;
-    chatMessage->message += " joined the game.";
+    chatMessage->message += "joined the game.";
     cclient->outgoing().push_back(chatMessage);
   }
 }
@@ -1297,7 +1297,7 @@ void Mineserver::Game::leavingPostWatcher(Mineserver::Game::pointer_t game, Mine
     chatMessage->mid = 0x03;
     chatMessage->message += "§e";
     chatMessage->message += player->getName();
-    chatMessage->message += " left the game.";
+    chatMessage->message += "left the game.";
     cclient->outgoing().push_back(chatMessage);
   }
   

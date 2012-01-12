@@ -838,7 +838,7 @@ void Mineserver::Game::messageWatcherPosition(Mineserver::Game::pointer_t game, 
     Mineserver::Game_Player::pointer_t player = getPlayerForClient(client);
     Mineserver::Game_PlayerPosition position(msg->x, msg->y, msg->z, msg->stance, player->getPosition().pitch, player->getPosition().yaw, msg->onGround);
     movementPostWatcher(shared_from_this(), getPlayerForClient(client), position);
-
+    //test
     //Mineserver::Game_PlayerPosition position(msg->x, msg->y, msg->z, msg->stance, msg->pitch, msg->yaw, msg->onGround);
     movementPostWatcher(shared_from_this(), getPlayerForClient(client), position);
     int oldX = player->getPosition().x, oldY = player->getPosition().y, oldZ = player->getPosition().z;

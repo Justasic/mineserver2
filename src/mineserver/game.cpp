@@ -873,13 +873,13 @@ void Mineserver::Game::messageWatcherPosition(Mineserver::Game::pointer_t game, 
         chunkMessage->sizeX = 15;
         chunkMessage->sizeY = 127;
         chunkMessage->sizeZ = 15;
-        chunkMessage->chunk = world->generateChunk(chunkX, chunkZ);
+        chunkMessage->chunk = world->generateChunk(tempX , tempZ);
         client->outgoing().push_back(chunkMessage);
-
-        oldChunkX = chunkX;
-        oldChunkZ = chunkZ;
         }
       }
+
+      oldChunkX = chunkX;
+      oldChunkZ = chunkZ;
     }
 
 

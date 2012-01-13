@@ -54,11 +54,11 @@ namespace Mineserver
     typedef std::vector<Mineserver::Network_Client::pointer_t> clientList_t;
     typedef std::map<std::string,Mineserver::Game_Player::pointer_t> playerList_t;
     typedef std::map<Mineserver::Network_Client::pointer_t,Mineserver::Game_Player::pointer_t> clientMap_t;
-    typedef std::map<int,Mineserver::World::pointer_t> worldList_t; 
+    typedef std::map<int,Mineserver::World::pointer_t> worldList_t;
     typedef std::set<Mineserver::Game_Player::pointer_t> playerSet_t;
     typedef std::set<uint32_t> entityIdSet_t;
     typedef std::map<Mineserver::Game_Player::pointer_t,clientList_t> playerMap_t;
-    typedef std::map<Mineserver::Game_Player::pointer_t,entityIdSet_t > playerSetMap_t; // this name sucks! 
+    typedef std::map<Mineserver::Game_Player::pointer_t,entityIdSet_t > playerSetMap_t; // this name sucks!
     typedef boost::signals2::signal<void (Mineserver::Game::pointer_t, Mineserver::Network_Client::pointer_t, Mineserver::Network_Message::pointer_t message)> messageWatcher_t;
     typedef boost::signals2::signal<bool (Mineserver::Game::pointer_t, Mineserver::Game_Player::pointer_t, Mineserver::Game_PlayerPosition position)> movementWatcher_t;
     typedef boost::signals2::signal<bool (Mineserver::Game::pointer_t, Mineserver::Game_Player::pointer_t, Mineserver::World::pointer_t, Mineserver::WorldBlockPosition wPosition, Mineserver::World_Chunk::pointer_t, Mineserver::World_ChunkPosition cPosition)> blockBreakWatcher_t;
@@ -71,6 +71,8 @@ namespace Mineserver
     } messageTypes;
 
   private:
+    int32_t oldChunkX;
+    int32_t oldChunkZ;
     int32_t m_nextEid;
     playerList_t m_players;
     clientList_t m_clients;
@@ -158,7 +160,7 @@ namespace Mineserver
       return (m_players.find(name) != m_players.end());
     }
 
-    uint32_t countPlayers() 
+    uint32_t countPlayers()
     {
         return m_players.size();
     }

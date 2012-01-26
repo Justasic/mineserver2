@@ -40,6 +40,7 @@ namespace Mineserver
     int32_t version;
     std::string username;
     int64_t seed;
+    std::string levelType;
     int32_t mode;
     int8_t dimension;
     int8_t difficulty;

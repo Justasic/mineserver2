@@ -174,7 +174,11 @@ namespace Mineserver
     {
       return m_playerMap[player];
     }
-
+    
+    clientList_t getClientList()
+    {
+      return m_clients;
+    }
     void addClient(Mineserver::Network_Client::pointer_t client)
     {
       m_clients.push_back(client);

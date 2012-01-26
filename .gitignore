@@ -8,3 +8,9 @@
 /src/CMakeFiles/
 /src/Makefile
 /src/cmake_install.cmake
+.cproject
+.project
+Doxyfile
+br
+mineserver-logo-preview.png
+nbproject/

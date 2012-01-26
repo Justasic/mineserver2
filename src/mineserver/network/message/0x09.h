@@ -30,6 +30,7 @@
 
 #include <mineserver/byteorder.h>
 #include <mineserver/network/message.h>
+#include <string>
 
 namespace Mineserver
 {
@@ -40,6 +41,7 @@ namespace Mineserver
     int8_t mode;
     int16_t height;
     int64_t seed;
+    std::string levelType;
   };
 }
 

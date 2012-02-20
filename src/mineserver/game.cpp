@@ -58,6 +58,28 @@
 #include <mineserver/network/message/kick.h>
 #include <mineserver/game.h>
 #include <mineserver/game/object/slot.h>
+#include <stdarg.h>
+
+void SendMessage(Mineserver::Network_Client::pointer_t client, const std::string &str)
+{
+  boost::shared_ptr<Mineserver::Network_Message_Chat> chatMessage = boost::make_shared<Mineserver::Network_Message_Chat>();
+  chatMessage->mid = 0x03;
+  chatMessage->message += str;
+  client->outgoing().push_back(chatMessage);
+}
+
+void SendMessage(Mineserver::Network_Client::pointer_t client, const char* fmt, ...)
+{
+  va_list args;
+  char buffer[65535] = "";
+  if(fmt)
+  {
+    va_start(args, fmt);
+    vsnprintf(buffer, sizeof(buffer), fmt, args);
+    SendMessage(client, std::string(buffer));
+    va_end(args);
+  }
+}
 
 bool is_dead(Mineserver::Network_Client::pointer_t client) {
   return client->alive() == false;
@@ -287,12 +309,14 @@ void Mineserver::Game::messageWatcherLogin(Mineserver::Game::pointer_t game, Min
     playerListItemMessage->online = true;
     playerListItemMessage->ping = -1; // Note: this player shouldn't have a ping yet, so we should leave this -1
     cclient->outgoing().push_back(playerListItemMessage);
-    boost::shared_ptr<Mineserver::Network_Message_Chat> chatMessage = boost::make_shared<Mineserver::Network_Message_Chat>();
-    chatMessage->mid = 0x03;
-    chatMessage->message += "§e";
-    chatMessage->message += msg->username;
-    chatMessage->message += " joined the game.";
-    cclient->outgoing().push_back(chatMessage);
+
+    SendMessage(cclient, "§e%s joined the game.", msg->username.c_str());
+//     boost::shared_ptr<Mineserver::Network_Message_Chat> chatMessage = boost::make_shared<Mineserver::Network_Message_Chat>();
+//     chatMessage->mid = 0x03;
+//     chatMessage->message += "§e";
+//     chatMessage->message += msg->username;
+//     chatMessage->message += " joined the game.";
+//     cclient->outgoing().push_back(chatMessage);
   }
 }
 

@@ -85,10 +85,11 @@ void HandleSegfault()
   slog << "======================== END OF REPORT ==========================" << std::endl;
   std::cout << slog.str(); //Write to terminal.
   std::cout.flush(); //Clear output
-  exit(SIGSEGV);
+  exit(SIGSEGV); // Exit so we're not still running
   #endif
 }
 
+// TODO: On signal event: close active connections, save world (when implemented), etc.
 void SignalHandler(int sig)
 {
   switch(sig){

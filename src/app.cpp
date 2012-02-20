@@ -46,6 +46,7 @@ int main()
 {
   std::cout << "Mineserver 2.0" << std::endl;
 
+  // Initialize our signal halder
   InitSignals();
 
   boost::asio::io_service service;
@@ -74,8 +75,6 @@ int main()
   Mineserver::Network_Server::pointer_t server = boost::make_shared<Mineserver::Network_Server>(game, protocol, &service);
 
   std::cout << "Server is now waiting for connections." << std::endl << "--" << std::endl;
-
-  // TODO: Listen for SIGTERM, on event: close active connections, save world (when implemented), etc.
 
   while (true) {
     try {

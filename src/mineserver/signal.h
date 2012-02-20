@@ -28,8 +28,10 @@
 #ifndef _SIGNAL_H_
 #define _SIGNAL_H_
 
+// Tell the signal function what signals to listen for
 extern void InitSignals();
 
+// Handle the selected signals we specified in InitSignals
 extern void SignalHandler(int);
 
 // This can later be modified to handle segfaults in .so style modules :)

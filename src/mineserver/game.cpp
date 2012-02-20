@@ -64,7 +64,7 @@ void SendMessage(Mineserver::Network_Client::pointer_t client, const std::string
 {
   boost::shared_ptr<Mineserver::Network_Message_Chat> chatMessage = boost::make_shared<Mineserver::Network_Message_Chat>();
   chatMessage->mid = 0x03;
-  chatMessage->message += str;
+  chatMessage->message = str;
   client->outgoing().push_back(chatMessage);
 }
 
@@ -80,6 +80,29 @@ void SendMessage(Mineserver::Network_Client::pointer_t client, const char* fmt, 
     va_end(args);
   }
 }
+
+void SendKick(Mineserver::Network_Client::pointer_t client, const std::string &str)
+{
+
+  boost::shared_ptr<Mineserver::Network_Message_Kick> response = boost::make_shared<Mineserver::Network_Message_Kick>();
+  response->mid = 0xFF;
+  response->reason = str;
+  client->outgoing().push_back(response);
+}
+
+void SendKick(Mineserver::Network_Client::pointer_t client, const char* fmt, ...)
+{
+  va_list args;
+  char buffer[65535] = "";
+  if(fmt)
+  {
+    va_start(args, fmt);
+    vsnprintf(buffer, sizeof(buffer), fmt, args);
+    SendKick(client, std::string(buffer));
+    va_end(args);
+  }
+}
+
 
 bool is_dead(Mineserver::Network_Client::pointer_t client) {
   return client->alive() == false;
@@ -224,9 +247,12 @@ void Mineserver::Game::messageWatcherLogin(Mineserver::Game::pointer_t game, Min
 
   associateClient(client, player);
 
+  if(msg->version != 23)
+    SendKick(client, "Your client is outdated!");
+  
   boost::shared_ptr<Mineserver::Network_Message_Login> loginMessage = boost::make_shared<Mineserver::Network_Message_Login>();
   loginMessage->mid = 0x01;
-  loginMessage->version = 22;
+  loginMessage->version = 23;
   loginMessage->seed = 0;//Changed this to 0 because I think it removes client side boimes - not 100% sure though.
   loginMessage->mode = world->getGameMode();
   loginMessage->dimension = world->getDimension();
@@ -311,12 +337,6 @@ void Mineserver::Game::messageWatcherLogin(Mineserver::Game::pointer_t game, Min
     cclient->outgoing().push_back(playerListItemMessage);
 
     SendMessage(cclient, "§e%s joined the game.", msg->username.c_str());
-//     boost::shared_ptr<Mineserver::Network_Message_Chat> chatMessage = boost::make_shared<Mineserver::Network_Message_Chat>();
-//     chatMessage->mid = 0x03;
-//     chatMessage->message += "§e";
-//     chatMessage->message += msg->username;
-//     chatMessage->message += " joined the game.";
-//     cclient->outgoing().push_back(chatMessage);
   }
 }
 
@@ -745,12 +765,8 @@ void Mineserver::Game::leavingPostWatcher(Mineserver::Game::pointer_t game, Mine
     playerListItemMessage->online = false;
     playerListItemMessage->ping = -1;
     cclient->outgoing().push_back(playerListItemMessage);
-    boost::shared_ptr<Mineserver::Network_Message_Chat> chatMessage = boost::make_shared<Mineserver::Network_Message_Chat>();
-    chatMessage->mid = 0x03;
-    chatMessage->message += "§e";
-    chatMessage->message += player->getName();
-    chatMessage->message += " left the game.";
-    cclient->outgoing().push_back(chatMessage);
+
+    SendMessage(cclient, "§e%s left the game.", player->getName().c_str());
   }
 
   clientList_t other_clients;

@@ -229,6 +229,7 @@ void Mineserver::Game::messageWatcherLogin(Mineserver::Game::pointer_t game, Min
   Mineserver::World::pointer_t world = getWorld(0);
 
   std::cout << "Player login v." << msg->version << ": " << msg->username << std::endl;
+  std::cout << "GAMEMODE: " << msg->levelType << std::endl;
 
   Mineserver::Game_Player::pointer_t player;
   if (m_players.find(msg->username) == m_players.end()) {
@@ -247,17 +248,18 @@ void Mineserver::Game::messageWatcherLogin(Mineserver::Game::pointer_t game, Min
 
   associateClient(client, player);
 
-  if(msg->version != 23)
+  if(msg->version != PROTOCOL_VERSION)
     SendKick(client, "Your client is outdated!");
   
   boost::shared_ptr<Mineserver::Network_Message_Login> loginMessage = boost::make_shared<Mineserver::Network_Message_Login>();
   loginMessage->mid = 0x01;
-  loginMessage->version = 23;
+  loginMessage->version = PROTOCOL_VERSION;
   loginMessage->seed = 0;//Changed this to 0 because I think it removes client side boimes - not 100% sure though.
   loginMessage->mode = world->getGameMode();
   loginMessage->dimension = world->getDimension();
   loginMessage->difficulty = world->getDifficulty();
   loginMessage->worldHeight = world->getWorldHeight();
+  loginMessage->levelType = 0; // Justasic: I think this tells the client that its level type is DEFAULT
   loginMessage->maxPlayers = 32; // this determines how many slots the tab window will have
   client->outgoing().push_back(loginMessage);
 
@@ -543,10 +545,11 @@ void Mineserver::Game::messageWatcherServerListPing(Mineserver::Game::pointer_t 
   std::stringstream reason;
   reason << "Mineserver 2.0§" << game->countPlayers() << "§" << 32; // TODO: Get max players
 
-  boost::shared_ptr<Mineserver::Network_Message_Kick> response = boost::make_shared<Mineserver::Network_Message_Kick>();
-  response->mid = 0xFF;
-  response->reason = reason.str();
-  client->outgoing().push_back(response);
+  SendKick(client, reason.str());
+//   boost::shared_ptr<Mineserver::Network_Message_Kick> response = boost::make_shared<Mineserver::Network_Message_Kick>();
+//   response->mid = 0xFF;
+//   response->reason = reason.str();
+//   client->outgoing().push_back(response);
 }
 
 bool Mineserver::Game::chatPostWatcher(Mineserver::Game::pointer_t game, Mineserver::Game_Player::pointer_t player, std::string message)

@@ -45,6 +45,8 @@
 #include <mineserver/network/message.h>
 #include <mineserver/network/client.h>
 
+#define PROTOCOL_VERSION 23
+
 namespace Mineserver
 {
   class Game : public boost::enable_shared_from_this<Mineserver::Game>

@@ -28,6 +28,20 @@ IF(NOT CMAKE_BUILD_TYPE)
 ENDIF()
 
 #
+# Find perl for run-cc.pl
+#
+find_program(PERL perl)
+
+#
+# Use run-cc.pl
+#
+if(PERL)
+  set(CMAKE_CXX_COMPILE_OBJECT "${PERL} ${${PROJECT_NAME}_SOURCE_DIR}/run-cc.pl -q ${CMAKE_CXX_COMPILE_OBJECT}")
+  set(CMAKE_CXX_LINK_EXECUTABLE "${PERL} ${${PROJECT_NAME}_SOURCE_DIR}/run-cc.pl -q ${CMAKE_CXX_LINK_EXECUTABLE}")
+  set(CMAKE_CXX_CREATE_SHARED_MODULE "${PERL} ${${PROJECT_NAME}_SOURCE_DIR}/run-cc.pl -q ${CMAKE_CXX_CREATE_SHARED_MODULE}")
+endif(PERL)
+
+#
 # Configure paths
 #
 SET(CONFIG_DIR_BIN bin/)

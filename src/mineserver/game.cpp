@@ -259,7 +259,7 @@ void Mineserver::Game::messageWatcherLogin(Mineserver::Game::pointer_t game, Min
   loginMessage->dimension = world->getDimension();
   loginMessage->difficulty = world->getDifficulty();
   loginMessage->worldHeight = world->getWorldHeight();
-  loginMessage->levelType = 0; // Justasic: I think this tells the client that its level type is DEFAULT
+  loginMessage->levelType = "DEFAULT"; // Justasic: I think this tells the client that its level type is DEFAULT
   loginMessage->maxPlayers = 32; // this determines how many slots the tab window will have
   client->outgoing().push_back(loginMessage);
 

@@ -43,7 +43,7 @@ namespace Mineserver
     int32_t mode;
     int8_t dimension;
     int8_t difficulty;
-    int8_t levelType;
+    std::string levelType;
     uint8_t worldHeight;
     uint8_t maxPlayers;
   };

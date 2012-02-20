@@ -40,6 +40,7 @@ namespace Mineserver
     int8_t mode;
     int16_t height;
     int64_t seed;
+    std::string levelType;
   };
 }
 

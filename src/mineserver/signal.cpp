@@ -34,7 +34,7 @@
 #include <errno.h>
 #include <cstring>
 #include <cstdlib>
-#include <ctime> 
+#include <ctime>
 
 void InitSignals()
 {
@@ -71,7 +71,7 @@ void HandleSegfault()
   slog << "Please note that the Mineserver developers may ask you to re-run this under gdb!" << std::endl;
   slog << "Time of crash: " << tbuf << std::endl;
   slog << "Mineserver version: " << VERSION_FULL << std::endl;
-  #ifndef HAVE_SYS_UTSNAME_H
+  #ifdef HAVE_SYS_UTSNAME_H
   slog << "System info: " << uts.sysname << " " << uts.nodename << " " <<  uts.release << " " << uts.machine << std::endl;
   slog << "System version: " << uts.version << std::endl;
   #endif
@@ -85,6 +85,7 @@ void HandleSegfault()
   slog << "======================== END OF REPORT ==========================" << std::endl;
   std::cout << slog.str(); //Write to terminal.
   std::cout.flush(); //Clear output
+  exit(SIGSEGV);
   #endif
 }
 
@@ -94,9 +95,10 @@ void SignalHandler(int sig)
     case SIGHUP:
       signal(sig, SIG_IGN);
       /* TODO: Rehash a config? hmmnn */
+      std::cout << "SIGHUP caught, ignoring.." << std::endl;
       break;
 #ifdef HAVE_BACKTRACE
-    case SIGSEGV:
+    case SIGSEGV: // Justasic: You can stop SIGSEGV's but i HIGHLY recommend against it unless you have good reason to.
       HandleSegfault();
       break;
 #endif
@@ -106,9 +108,10 @@ void SignalHandler(int sig)
       signal(sig, SIG_IGN);
       signal(SIGHUP, SIG_IGN);
       /* TODO: Put code here for a slow kill shutdown, for now we (should) kick all clients :) */
+      std::cout << "Received SIGTERM, Exiting.." << std::endl;
       exit(0); // For now, exit.
       break;
     default:
-      static_cast<void>(0); // TODO: fix this to do somethinh useful
+      static_cast<void>(0); // TODO: fix this to do something useful
   }
 }

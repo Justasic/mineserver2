@@ -46,7 +46,7 @@ int main()
 {
   std::cout << "Mineserver 2.0" << std::endl;
 
-  
+  InitSignals();
 
   boost::asio::io_service service;
 

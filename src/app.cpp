@@ -40,10 +40,13 @@
 #include <mineserver/world/generator/mapgen.h>
 #include <mineserver/network/protocol/notch/protocol.h>
 #include <mineserver/network/server.h>
+#include <mineserver/signal.h>
 
 int main()
 {
   std::cout << "Mineserver 2.0" << std::endl;
+
+  
 
   boost::asio::io_service service;
 

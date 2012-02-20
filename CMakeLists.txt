@@ -27,6 +27,9 @@ IF(NOT CMAKE_BUILD_TYPE)
   )
 ENDIF()
 
+# Add an optional variable for using run-cc.pl for building, Perl will be checked below regardless of this setting
+option(USE_RUN_CC_PL "Use run-cc.pl for building" ON)
+
 #
 # Find perl for run-cc.pl
 #
@@ -35,11 +38,11 @@ find_program(PERL perl)
 #
 # Use run-cc.pl
 #
-if(PERL)
+if(PERL AND USE_RUN_CC_PL)
   set(CMAKE_CXX_COMPILE_OBJECT "${PERL} ${${PROJECT_NAME}_SOURCE_DIR}/run-cc.pl -q ${CMAKE_CXX_COMPILE_OBJECT}")
   set(CMAKE_CXX_LINK_EXECUTABLE "${PERL} ${${PROJECT_NAME}_SOURCE_DIR}/run-cc.pl -q ${CMAKE_CXX_LINK_EXECUTABLE}")
   set(CMAKE_CXX_CREATE_SHARED_MODULE "${PERL} ${${PROJECT_NAME}_SOURCE_DIR}/run-cc.pl -q ${CMAKE_CXX_CREATE_SHARED_MODULE}")
-endif(PERL)
+endif(PERL AND USE_RUN_CC_PL)
 
 #
 # Configure paths
@@ -70,6 +73,20 @@ IF(MSVC_IDE)
   SET(CMAKE_CXX_FLAGS_RELEASE "/MT /D_SECURE_SCL=0")
 ENDIF(MSVC_IDE)
 
+# used for the functions below
+include(CheckFunctionExists)
+include(CheckIncludeFile)
+include(CheckTypeSize)
+include(CheckLibraryExists)
+include(CheckCXXCompilerFlag)
+
+# functions/includes needed during compile
+check_function_exists(backtrace HAVE_BACKTRACE)
+check_include_file(sys/utsname.h HAVE_SYS_UTSNAME_H)
+
+# our system specific configuration file :P
+configure_file(${${PROJECT_NAME}_SOURCE_DIR}/src/config.h.cmake ${${PROJECT_NAME}_SOURCE_DIR}/src/mineserver/sysconfig.h)
+
 FIND_PACKAGE(Boost COMPONENTS system filesystem signals thread REQUIRED)
 FIND_PACKAGE(ZLIB)
 FIND_PACKAGE(Iconv)
@@ -80,6 +97,7 @@ SET(mineserver_source
   src/app.cpp
   src/mineserver/nbt.cpp
   src/mineserver/game.cpp
+  src/mineserver/signal.cpp
   src/mineserver/game/player.cpp
   src/mineserver/localization.cpp
   src/mineserver/network/server.cpp

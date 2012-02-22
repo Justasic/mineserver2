@@ -1,0 +1,48 @@
+Mineserver 2.0
+==============
+
+![Mineserver 2.0 Preview](http://i.imgur.com/1cwmH.png)
+
+[Forum Announcement](https://mineserver.be/forums/index.php?topic=470)
+
+Overview
+--------
+
+We've learnt a lot from writing the first version of Mineserver. One of those
+lessons was that to maintain a large application, it's necessary to design the
+application with the right concepts in mind from the very start. This was one of
+the driving forces behind the rewrite for 2.0. To that end, we've tried breaking
+up the new codebase into smaller, self contained pieces, while maintaining the
+speed and efficiency Mineserver is known for.
+
+NOTE
+----
+
+This is very much a work in progress! We'll be slowly pulling in bits of code
+from the original Mineserver repository to make this functional.
+
+Planned features
+----------------
+
+* **Cleaner code** - cohesive, isolated modules make hacking on Mineserver a breeze!
+* **Better design** - many advanced features that were all but impossible before are now simple!
+* **Neater installation** - getting started with Mineserver has never been easier!
+* **Virtual hosting** - host more than one server on the same IP and port!
+* **Distributed hosting** - spread the load of your game over multiple cores or even physical machines!
+* **Plugin repository** - find all the best plugins in one convenient place!
+* **Multiple protocols** - use any Minecraft client!
+* **Game hibernation** - no resources used while no players are connected!
+* **Remote API** - interact with Mineserver from any application that can speak JSON!
+* **Rich administrative tools** - delegate administration of your games over multiple admin tiers!
+
+Contact
+-------
+
+Any feedback would be greatly appreciated and new contributors are always
+welcome. We can be contacted in any of the following ways:
+
+* **IRC** - [#mineserver](irc://irc.freenode.net/mineserver) on freenode
+* **Forums** - reply to [this](https://mineserver.be/forums/index.php?topic=470) thread (or start your own! Be a man!)
+* **Email** - [developers@mineserver.be](mailto:developers@mineserver.be)
+* **GitHub** - [https://github.com/Mineserver/mineserver2](https://github.com/Mineserver/mineserver2)
+* **Virtual Stalk** - google any of the developers, none of us are too hard to find!

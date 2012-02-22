@@ -91,6 +91,7 @@ my @msgfilters = (
 		my ($msg) = @_;
 		$msg = $location . $msg;
 		$location = "";
+		# These string replacements can be used for those really long boost errors as well.. - Justasic
 		$msg =~ s/std::basic_string\<char\, std\:\:char_traits\<char\>, std::allocator\<char\> \>(\s+|)/std::string/g;
 # 		$msg =~ s/std::basic_string\<char\, .*?irc_char_traits, std::allocator\<char\> \>(\s+|)/irc::string/g;
 # 		$msg =~ s/std::basic_string\<char\, .*?ci_char_traits, std::allocator\<char\> \>(\s+|)/ci::string/g;
@@ -119,7 +120,7 @@ my $action = "";
 if ($cc eq "ar") {
 	$name = $ARGV[1];
 	$action = "ARCHIVE";
-} else {
+} else { # Inspircd's crap, if someone wants to remove them they can figure out how to do so.. - Justasic
 	foreach my $n (@ARGV)
 	{
 		if ($n =~ /\.cpp|\.c$/)

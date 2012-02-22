@@ -36,6 +36,10 @@
 #include <cstdlib>
 #include <ctime>
 
+// Justasic: I wrote the signal handler by hand since i dont understand how
+// boost's signal handler works and because i can add a lot more "fine tuning"
+// functions into it..
+
 void InitSignals()
 {
   signal(SIGTERM, SignalHandler); // Justasic: Terminate signal sent by kill
@@ -86,7 +90,7 @@ void HandleSegfault()
   std::cout << slog.str(); //Write to terminal.
   std::cout.flush(); //Clear output
   exit(SIGSEGV); // Exit so we're not still running
-  #endif
+  #endif // HAVE_BACKTRACE
 }
 
 // TODO: On signal event: close active connections, save world (when implemented), etc.

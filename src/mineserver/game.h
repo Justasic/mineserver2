@@ -45,6 +45,7 @@
 #include <mineserver/network/message.h>
 #include <mineserver/network/client.h>
 
+// Justasic: Our protocol version..
 #define PROTOCOL_VERSION 23
 
 namespace Mineserver

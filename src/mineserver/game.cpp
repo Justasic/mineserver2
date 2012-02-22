@@ -58,51 +58,6 @@
 #include <mineserver/network/message/kick.h>
 #include <mineserver/game.h>
 #include <mineserver/game/object/slot.h>
-#include <stdarg.h>
-
-void SendMessage(Mineserver::Network_Client::pointer_t client, const std::string &str)
-{
-  boost::shared_ptr<Mineserver::Network_Message_Chat> chatMessage = boost::make_shared<Mineserver::Network_Message_Chat>();
-  chatMessage->mid = 0x03;
-  chatMessage->message = str;
-  client->outgoing().push_back(chatMessage);
-}
-
-void SendMessage(Mineserver::Network_Client::pointer_t client, const char* fmt, ...)
-{
-  va_list args;
-  char buffer[65535] = "";
-  if(fmt)
-  {
-    va_start(args, fmt);
-    vsnprintf(buffer, sizeof(buffer), fmt, args);
-    SendMessage(client, std::string(buffer));
-    va_end(args);
-  }
-}
-
-void SendKick(Mineserver::Network_Client::pointer_t client, const std::string &str)
-{
-
-  boost::shared_ptr<Mineserver::Network_Message_Kick> response = boost::make_shared<Mineserver::Network_Message_Kick>();
-  response->mid = 0xFF;
-  response->reason = str;
-  client->outgoing().push_back(response);
-}
-
-void SendKick(Mineserver::Network_Client::pointer_t client, const char* fmt, ...)
-{
-  va_list args;
-  char buffer[65535] = "";
-  if(fmt)
-  {
-    va_start(args, fmt);
-    vsnprintf(buffer, sizeof(buffer), fmt, args);
-    SendKick(client, std::string(buffer));
-    va_end(args);
-  }
-}
-
 
 bool is_dead(Mineserver::Network_Client::pointer_t client) {
   return client->alive() == false;
@@ -249,7 +204,7 @@ void Mineserver::Game::messageWatcherLogin(Mineserver::Game::pointer_t game, Min
   associateClient(client, player);
 
   if(msg->version != PROTOCOL_VERSION)
-    SendKick(client, "Your client is outdated!");
+    client->Kick("Your client is outdated!");
   
   boost::shared_ptr<Mineserver::Network_Message_Login> loginMessage = boost::make_shared<Mineserver::Network_Message_Login>();
   loginMessage->mid = 0x01;
@@ -338,7 +293,7 @@ void Mineserver::Game::messageWatcherLogin(Mineserver::Game::pointer_t game, Min
     playerListItemMessage->ping = -1; // Note: this player shouldn't have a ping yet, so we should leave this -1
     cclient->outgoing().push_back(playerListItemMessage);
 
-    SendMessage(cclient, "§e%s joined the game.", msg->username.c_str());
+    cclient->Message("§e%s joined the game.", msg->username.c_str());
   }
 }
 
@@ -545,7 +500,7 @@ void Mineserver::Game::messageWatcherServerListPing(Mineserver::Game::pointer_t 
   std::stringstream reason;
   reason << "Mineserver 2.0§" << game->countPlayers() << "§" << 32; // TODO: Get max players
 
-  SendKick(client, reason.str());
+  client->Kick(reason.str());
 //   boost::shared_ptr<Mineserver::Network_Message_Kick> response = boost::make_shared<Mineserver::Network_Message_Kick>();
 //   response->mid = 0xFF;
 //   response->reason = reason.str();
@@ -769,7 +724,7 @@ void Mineserver::Game::leavingPostWatcher(Mineserver::Game::pointer_t game, Mine
     playerListItemMessage->ping = -1;
     cclient->outgoing().push_back(playerListItemMessage);
 
-    SendMessage(cclient, "§e%s left the game.", player->getName().c_str());
+    cclient->Message("§e%s left the game.", player->getName().c_str());
   }
 
   clientList_t other_clients;

@@ -29,6 +29,7 @@
 #include <vector>
 #include <iostream>
 #include <cstdio>
+#include <stdarg.h>
 
 #include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
@@ -40,6 +41,7 @@
 #include <mineserver/network/client.h>
 #include <mineserver/network/message/keepalive.h>
 #include <mineserver/network/message/kick.h>
+#include <mineserver/network/message/chat.h>
 
 void Mineserver::Network_Client::run()
 {
@@ -173,5 +175,48 @@ void Mineserver::Network_Client::handleWrite(const boost::system::error_code& e,
 
   if (m_outgoingBuffer.size() > 0) {
     write();
+  }
+}
+
+void Mineserver::Network_Client::Message(const std::string &str)
+{
+  boost::shared_ptr<Mineserver::Network_Message_Chat> chatMessage(new Mineserver::Network_Message_Chat);
+  chatMessage->mid = 0x03;
+  chatMessage->message = str;
+  this->outgoing().push_back(chatMessage);
+}
+
+void Mineserver::Network_Client::Message(const char* fmt, ...)
+{
+  va_list args;
+  char buffer[65535] = "";
+  if(fmt)
+  {
+    va_start(args, fmt);
+    vsnprintf(buffer, sizeof(buffer), fmt, args);
+    this->Message(std::string(buffer));
+    va_end(args);
+  }
+}
+
+void Mineserver::Network_Client::Kick(const std::string &str)
+{
+  
+  boost::shared_ptr<Mineserver::Network_Message_Kick> response(new Mineserver::Network_Message_Kick);
+  response->mid = 0xFF;
+  response->reason = str;
+  this->outgoing().push_back(response);
+}
+
+void Mineserver::Network_Client::Kick(const char* fmt, ...)
+{
+  va_list args;
+  char buffer[65535] = "";
+  if(fmt)
+  {
+    va_start(args, fmt);
+    vsnprintf(buffer, sizeof(buffer), fmt, args);
+    this->Kick(std::string(buffer));
+    va_end(args);
   }
 }

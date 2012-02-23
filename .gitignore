@@ -7,4 +7,5 @@
 /src/CMakeFiles/
 /src/Makefile
 /src/cmake_install.cmake
+/src/mineserver/sysconfig.h
 *~

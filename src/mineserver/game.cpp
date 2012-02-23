@@ -501,10 +501,6 @@ void Mineserver::Game::messageWatcherServerListPing(Mineserver::Game::pointer_t 
   reason << "Mineserver 2.0§" << game->countPlayers() << "§" << 32; // TODO: Get max players
 
   client->Kick(reason.str());
-//   boost::shared_ptr<Mineserver::Network_Message_Kick> response = boost::make_shared<Mineserver::Network_Message_Kick>();
-//   response->mid = 0xFF;
-//   response->reason = reason.str();
-//   client->outgoing().push_back(response);
 }
 
 bool Mineserver::Game::chatPostWatcher(Mineserver::Game::pointer_t game, Mineserver::Game_Player::pointer_t player, std::string message)
@@ -540,11 +536,11 @@ bool Mineserver::Game::movementPostWatcher(Mineserver::Game::pointer_t game, Min
     boost::shared_ptr<Mineserver::Network_Message_EntityTeleport> tmp = boost::make_shared<Mineserver::Network_Message_EntityTeleport>();
     tmp->mid = 0x22;
     tmp->entityId = player->getEid();
-    tmp->x      = (int32_t)(position.x * 32);
-    tmp->y      = (int32_t)(position.y * 32);
-    tmp->z      = (int32_t)(position.z * 32);
-    tmp->pitch  = (int8_t)(position.pitch / 360 * 256);
-    tmp->yaw    = (int8_t)(position.yaw / 360 * 256);
+    tmp->x      = static_cast<int32_t>((position.x * 32));
+    tmp->y      = static_cast<int32_t>((position.y * 32));
+    tmp->z      = static_cast<int32_t>((position.z * 32));
+    tmp->pitch  = static_cast<int8_t>((position.pitch / 360 * 256));
+    tmp->yaw    = static_cast<int8_t>((position.yaw / 360 * 256));
     player_move = tmp;
   }
   else if ((oldPos.yaw != position.yaw || oldPos.pitch != position.pitch)
@@ -554,8 +550,8 @@ bool Mineserver::Game::movementPostWatcher(Mineserver::Game::pointer_t game, Min
     boost::shared_ptr<Mineserver::Network_Message_EntityLook> tmp = boost::make_shared<Mineserver::Network_Message_EntityLook>();
     tmp->mid = 0x20;
     tmp->entityId = player->getEid();
-    tmp->yaw    = (int8_t)(position.yaw / 360 * 256);
-    tmp->pitch  = (int8_t)(position.pitch / 360 * 256);
+    tmp->yaw    = static_cast<int8_t>((position.yaw / 360 * 256));
+    tmp->pitch  = static_cast<int8_t>((position.pitch / 360 * 256));
     player_move = tmp;
   }
   else if ((oldPos.yaw == position.yaw && oldPos.pitch == position.pitch)
@@ -565,9 +561,9 @@ bool Mineserver::Game::movementPostWatcher(Mineserver::Game::pointer_t game, Min
     boost::shared_ptr<Mineserver::Network_Message_EntityRelativeMove> tmp = boost::make_shared<Mineserver::Network_Message_EntityRelativeMove>();
     tmp->mid = 0x1F;
     tmp->entityId = player->getEid();
-    tmp->x      = (int8_t)(dX * 32);
-    tmp->y      = (int8_t)(dY * 32);
-    tmp->z      = (int8_t)(dZ * 32);
+    tmp->x      = static_cast<int8_t>((dX * 32));
+    tmp->y      = static_cast<int8_t>((dY * 32));
+    tmp->z      = static_cast<int8_t>((dZ * 32));
     player_move = tmp;
   }
   else
@@ -576,11 +572,11 @@ bool Mineserver::Game::movementPostWatcher(Mineserver::Game::pointer_t game, Min
     boost::shared_ptr<Mineserver::Network_Message_EntityRelativeMoveAndLook> tmp = boost::make_shared<Mineserver::Network_Message_EntityRelativeMoveAndLook>();
     tmp->mid = 0x21;
     tmp->entityId = player->getEid();
-    tmp->x      = (int8_t)(dX * 32);
-    tmp->y      = (int8_t)(dY * 32);
-    tmp->z      = (int8_t)(dZ * 32);
-    tmp->yaw    = (int8_t)(position.yaw / 360 * 256);
-    tmp->pitch  = (int8_t)(position.pitch / 360 * 256);
+    tmp->x      = static_cast<int8_t>((dX * 32));
+    tmp->y      = static_cast<int8_t>((dY * 32));
+    tmp->z      = static_cast<int8_t>((dZ * 32));
+    tmp->yaw    = static_cast<int8_t>((position.yaw / 360 * 256));
+    tmp->pitch  = static_cast<int8_t>((position.pitch / 360 * 256));
     player_move = tmp;
   }
 
@@ -638,11 +634,11 @@ bool Mineserver::Game::movementPostWatcher(Mineserver::Game::pointer_t game, Min
         spawnEntity->mid = 0x14;
         spawnEntity->entityId = player->getEid();
         spawnEntity->name     = player->getName();
-        spawnEntity->x        = (int32_t)oldPos.x*32;
-        spawnEntity->y        = (int32_t)oldPos.y*32;
-        spawnEntity->z        = (int32_t)oldPos.z*32;
-        spawnEntity->rotation = (int8_t)(oldPos.yaw / 360 * 256);
-        spawnEntity->pitch    = (int8_t)(oldPos.pitch / 360 * 256);
+	spawnEntity->x        = static_cast<int32_t>(oldPos.x * 32);
+	spawnEntity->y        = static_cast<int32_t>(oldPos.y * 32);
+	spawnEntity->z        = static_cast<int32_t>(oldPos.z * 32);
+	spawnEntity->rotation = static_cast<int8_t>((oldPos.yaw / 360 * 256));
+	spawnEntity->pitch    = static_cast<int8_t>((oldPos.pitch / 360 * 256));
         spawnEntity->currentItem = 0;
         for(clientList_t::iterator it=other_clients.begin();it != other_clients.end(); it++) {
           std::cout << " [" << other->getEid() << "] << spawn entity #" << player->getEid() << std::endl;
@@ -652,11 +648,11 @@ bool Mineserver::Game::movementPostWatcher(Mineserver::Game::pointer_t game, Min
         spawnEntity->mid = 0x14;
         spawnEntity->entityId = other->getEid();
         spawnEntity->name     = other->getName();
-        spawnEntity->x        = (int32_t)other->getPosition().x*32;
-        spawnEntity->y        = (int32_t)other->getPosition().y*32;
-        spawnEntity->z        = (int32_t)other->getPosition().z*32;
-        spawnEntity->rotation = (int8_t)(other->getPosition().yaw / 360 * 256);
-        spawnEntity->pitch    = (int8_t)(other->getPosition().pitch / 360 * 256);
+	spawnEntity->x        = static_cast<int32_t>(other->getPosition().x * 32);
+	spawnEntity->y        = static_cast<int32_t>(other->getPosition().y * 32);
+	spawnEntity->z        = static_cast<int32_t>(other->getPosition().z * 32);
+	spawnEntity->rotation = static_cast<int8_t>(other->getPosition().yaw / 360 * 256);
+	spawnEntity->pitch    = static_cast<int8_t>(other->getPosition().pitch / 360 * 256);
         spawnEntity->currentItem = 0;
         for(clientList_t::iterator it=my_clients.begin();it != my_clients.end(); it++) {
           std::cout << " [" << player->getEid() << "] << spawn entity #" << other->getEid() << std::endl;

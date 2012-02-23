@@ -201,7 +201,6 @@ void Mineserver::Network_Client::Message(const char* fmt, ...)
 
 void Mineserver::Network_Client::Kick(const std::string &str)
 {
-  
   boost::shared_ptr<Mineserver::Network_Message_Kick> response(new Mineserver::Network_Message_Kick);
   response->mid = 0xFF;
   response->reason = str;

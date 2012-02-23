@@ -4,7 +4,11 @@
 #cmakedefine HAVE_BACKTRACE 1
 #cmakedefine HAVE_SYS_UTSNAME_H 1
 
+#define VERSION_MAJOR @mineserver_MAJOR_VERSION@
+#define VERSION_MINOR @mineserver_MINOR_VERSION@
+#define VERSION_PATCH @mineserver_PATCH_LEVEL@
 #define VERSION_FULL "@mineserver_MAJOR_VERSION@.@mineserver_MINOR_VERSION@.@mineserver_PATCH_LEVEL@"
+
 
 #ifdef HAVE_BACKTRACE
 # include <execinfo.h>

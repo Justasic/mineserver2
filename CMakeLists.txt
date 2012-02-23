@@ -93,6 +93,11 @@ FIND_PACKAGE(Iconv)
 FIND_PACKAGE(Threads)
 FIND_PACKAGE(Noise)
 
+#
+# Justasic: TODO: this mess with all the sources needs to be cleaned up into a CMake list compile..
+# because making a list of files is lame and gay.
+#
+
 SET(mineserver_source
   src/app.cpp
   src/mineserver/nbt.cpp

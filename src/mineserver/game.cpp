@@ -56,6 +56,7 @@
 #include <mineserver/network/message/playerlistitem.h>
 #include <mineserver/network/message/serverlistping.h>
 #include <mineserver/network/message/kick.h>
+#include <mineserver/sysconfig.h>
 #include <mineserver/game.h>
 #include <mineserver/game/object/slot.h>
 
@@ -209,7 +210,7 @@ void Mineserver::Game::messageWatcherLogin(Mineserver::Game::pointer_t game, Min
   boost::shared_ptr<Mineserver::Network_Message_Login> loginMessage = boost::make_shared<Mineserver::Network_Message_Login>();
   loginMessage->mid = 0x01;
   loginMessage->version = PROTOCOL_VERSION;
-  loginMessage->seed = 0;//Changed this to 0 because I think it removes client side boimes - not 100% sure though.
+  loginMessage->seed = 0; // flame: Changed this to 0 because I think it removes client side boimes - not 100% sure though.
   loginMessage->mode = world->getGameMode();
   loginMessage->dimension = world->getDimension();
   loginMessage->difficulty = world->getDifficulty();
@@ -498,7 +499,7 @@ void Mineserver::Game::messageWatcherServerListPing(Mineserver::Game::pointer_t 
   std::cout << "ServerListPing watcher called!" << std::endl;
 
   std::stringstream reason;
-  reason << "Mineserver 2.0§" << game->countPlayers() << "§" << 32; // TODO: Get max players
+  reason << "Mineserver " << VERSION_SIMPLE << "§" << game->countPlayers() << "§" << 32; // TODO: Get max players
 
   client->Kick(reason.str());
 }

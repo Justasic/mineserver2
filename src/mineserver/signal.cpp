@@ -74,7 +74,7 @@ void HandleSegfault()
   slog << "====================== Segmentation Fault ======================" << std::endl;
   slog << "Please note that the Mineserver developers may ask you to re-run this under gdb!" << std::endl;
   slog << "Time of crash: " << tbuf << std::endl;
-  slog << "Mineserver version: " << VERSION_FULL << std::endl;
+  slog << "Mineserver version: " << VERSION_COMPLETE << std::endl;
   #ifdef HAVE_SYS_UTSNAME_H
   slog << "System info: " << uts.sysname << " " << uts.nodename << " " <<  uts.release << " " << uts.machine << std::endl;
   slog << "System version: " << uts.version << std::endl;

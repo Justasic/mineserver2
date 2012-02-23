@@ -13,9 +13,36 @@ PROJECT(mineserver)
 #
 # Project version
 #
-SET(${PROJECT_NAME}_MAJOR_VERSION 2)
-SET(${PROJECT_NAME}_MINOR_VERSION 0)
-SET(${PROJECT_NAME}_PATCH_LEVEL 0)
+
+# Get the git revision location for the branch we're on
+if(EXISTS "${${PROJECT_NAME}_SOURCE_DIR}/.git/HEAD")
+  file(STRINGS ${${PROJECT_NAME}_SOURCE_DIR}/.git/HEAD GIT_HEAD_LOC REGEX ".*")
+  #file(GIT_HEAD_LOC ${${PROJECT_NAME}_SOURCE_DIR}/.git/HEAD REGEX ".*")
+  string(LENGTH ${GIT_HEAD_LOC} HEAD_LEN)
+  math(EXPR LEN "${HEAD_LEN} - 5")
+  string(SUBSTRING ${GIT_HEAD_LOC} 5 ${LEN} GIT_HEAD)
+endif(EXISTS "${${PROJECT_NAME}_SOURCE_DIR}/.git/HEAD")
+
+# Get the git revision we're on for the version string
+if(EXISTS "${${PROJECT_NAME}_SOURCE_DIR}/.git/${GIT_HEAD}")
+  #read_from_file(${${PROJECT_NAME}_SOURCE_DIR}/.git/${GIT_HEAD} ".*" VERSION_STR)
+  file(STRINGS ${${PROJECT_NAME}_SOURCE_DIR}/.git/${GIT_HEAD} VERSION_STR REGEX ".*")
+  # Get the length of the string
+  string(LENGTH ${VERSION_STR} VERSION_LEN)
+  # Subtract 7 from the string's length
+  math(EXPR VERSION_NUM_LEN "${VERSION_LEN} - ${VERSION_LEN} + 7")
+  # Extract the value from the string
+  string(SUBSTRING ${VERSION_STR} 0 ${VERSION_NUM_LEN} VERSION_GIT)
+endif(EXISTS "${${PROJECT_NAME}_SOURCE_DIR}/.git/${GIT_HEAD}")
+
+# Set the actual version strings, these are used inside the program later
+SET(${PROJECT_NAME}_MAJOR_VERSION 2) # Version Major
+SET(${PROJECT_NAME}_MINOR_VERSION 0) # Version Minor
+SET(${PROJECT_NAME}_PATCH_LEVEL 0)   # Version patch
+
+# the rest is automatic
+SET(${PROJECT_NAME}_VERSION_SIMPLE "${${PROJECT_NAME}_MAJOR_VERSION}.${${PROJECT_NAME}_MINOR_VERSION}.${${PROJECT_NAME}_PATCH_LEVEL}")
+SET(${PROJECT_NAME}_VERSION_COMPLETE "${${PROJECT_NAME}_VERSION_SIMPLE}-${VERSION_GIT}")
 
 #
 # set default build to Debug

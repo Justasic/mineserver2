@@ -41,10 +41,11 @@
 #include <mineserver/network/protocol/notch/protocol.h>
 #include <mineserver/network/server.h>
 #include <mineserver/signal.h>
+#include <mineserver/sysconfig.h>
 
 int main()
 {
-  std::cout << "Mineserver 2.0" << std::endl;
+  std::cout << "Mineserver " << VERSION_COMPLETE << std::endl;
 
   // Initialize our signal halder
   InitSignals();

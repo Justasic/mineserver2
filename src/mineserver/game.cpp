@@ -185,7 +185,6 @@ void Mineserver::Game::messageWatcherLogin(Mineserver::Game::pointer_t game, Min
   Mineserver::World::pointer_t world = getWorld(0);
 
   std::cout << "Player login v." << msg->version << ": " << msg->username << std::endl;
-  std::cout << "GAMEMODE: " << msg->levelType << std::endl;
 
   Mineserver::Game_Player::pointer_t player;
   if (m_players.find(msg->username) == m_players.end()) {

@@ -92,7 +92,7 @@ namespace Mineserver
 
   public:
     void run();
-		void chat(Mineserver::Network_Client::pointer_t client, std::string message);
+    void chat(Mineserver::Network_Client::pointer_t client, std::string message);
 
     Game() : m_nextEid(0) {}
 
@@ -165,6 +165,12 @@ namespace Mineserver
     {
         return m_players.size();
     }
+    
+    void disconnectAllClients(const std::string &reason)
+    {
+      for(clientList_t::iterator it = this->m_clients.begin(); it != this->m_clients.end(); ++it)
+	(*it)->Kick(reason);
+    }
 
     Mineserver::Game_Player::pointer_t getPlayer(const std::string& name)
     {
@@ -196,15 +202,15 @@ namespace Mineserver
     {
       return m_clientMap[client];
     }
-
+    
     void setWorld(int n, Mineserver::World::pointer_t world)
     {
-			m_worlds[n] = world;
+	m_worlds[n] = world;
     }
 
     bool hasWorld(int n)
     {
-			return (m_worlds.find(n) == m_worlds.end());
+	return (m_worlds.find(n) == m_worlds.end());
     }
 
     Mineserver::World::pointer_t getWorld(int n)

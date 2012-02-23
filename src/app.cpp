@@ -47,12 +47,12 @@ int main()
 {
   std::cout << "Mineserver " << VERSION_COMPLETE << std::endl;
 
-  // Initialize our signal halder
-  InitSignals();
-
   boost::asio::io_service service;
 
   Mineserver::Game::pointer_t game = boost::make_shared<Mineserver::Game>();
+
+  // Initialize our signal handler
+  InitSignals(game);
 
   game->setWorld(0, boost::make_shared<Mineserver::World>());
   game->getWorld(0)->addGenerator(boost::make_shared<Mineserver::mapGen>());

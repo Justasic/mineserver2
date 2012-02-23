@@ -39,9 +39,10 @@
 // Justasic: I wrote the signal handler by hand since i dont understand how
 // boost's signal handler works and because i can add a lot more "fine tuning"
 // functions into it..
-
-void InitSignals()
+Mineserver::Game::pointer_t siggame;
+void InitSignals(Mineserver::Game::pointer_t game)
 {
+  siggame = game;
   signal(SIGTERM, SignalHandler); // Justasic: Terminate signal sent by kill
   signal(SIGKILL, SignalHandler); // Justasic: Kill signal sent by kill or kernel i think
   signal(SIGINT, SignalHandler);  // Justasic: Signal Interrupt, usually a CTRL+C at console
@@ -89,8 +90,10 @@ void HandleSegfault()
   slog << "======================== END OF REPORT ==========================" << std::endl;
   std::cout << slog.str(); //Write to terminal.
   std::cout.flush(); //Clear output
-  exit(SIGSEGV); // Exit so we're not still running
   #endif // HAVE_BACKTRACE
+  // Try and inform the clients of a server crash so we don't freeze/crash clients
+  siggame->disconnectAllClients("Server Crash");
+  exit(SIGSEGV); // Exit so we're not still running
 }
 
 // TODO: On signal event: close active connections, save world (when implemented), etc.
@@ -114,6 +117,7 @@ void SignalHandler(int sig)
       signal(SIGHUP, SIG_IGN);
       /* TODO: Put code here for a slow kill shutdown, for now we (should) kick all clients :) */
       std::cout << "Received SIGTERM, Exiting.." << std::endl;
+      siggame->disconnectAllClients("Server Shutdown");
       exit(0); // For now, exit.
       break;
     default:

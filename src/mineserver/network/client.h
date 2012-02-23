@@ -107,7 +107,6 @@ namespace Mineserver
     void write();
 
     //Added by Justasic, not sure where these should go..
-
     void Kick(const std::string&);
     void Kick(const char*, ...);
 

@@ -27,9 +27,11 @@
 
 #ifndef _SIGNAL_H_
 #define _SIGNAL_H_
+#include <mineserver/game.h>
 
+extern Mineserver::Game::pointer_t siggame;
 // Tell the signal function what signals to listen for
-extern void InitSignals();
+extern void InitSignals(Mineserver::Game::pointer_t);
 
 // Handle the selected signals we specified in InitSignals
 extern void SignalHandler(int);

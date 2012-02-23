@@ -112,7 +112,7 @@ check_function_exists(backtrace HAVE_BACKTRACE)
 check_include_file(sys/utsname.h HAVE_SYS_UTSNAME_H)
 
 # our system specific configuration file :P
-configure_file(${${PROJECT_NAME}_SOURCE_DIR}/src/config.h.cmake ${${PROJECT_NAME}_SOURCE_DIR}/src/mineserver/sysconfig.h)
+configure_file(${${PROJECT_NAME}_SOURCE_DIR}/src/sysconfig.h.cmake ${${PROJECT_NAME}_SOURCE_DIR}/src/mineserver/sysconfig.h)
 
 FIND_PACKAGE(Boost COMPONENTS system filesystem signals thread REQUIRED)
 FIND_PACKAGE(ZLIB)
@@ -122,7 +122,7 @@ FIND_PACKAGE(Noise)
 
 #
 # Justasic: TODO: this mess with all the sources needs to be cleaned up into a CMake list compile..
-# because making a list of files is lame and gay.
+# because making a static list of files is lame and gay.
 #
 
 SET(mineserver_source

@@ -31,41 +31,43 @@ ect. I am going to use libnoise for now.*/
 
 #include <mineserver/world/generator/terrain.h>
 
-bool worldGeneration::terrainGen::noiseInit(long seed)
-{
-  mountainTerrain.SetSeed(seed);
-  mountainTerrain.SetFrequency(0.005);
-  mountainTerrain.SetOctaveCount(5);
+// bool worldGeneration::terrainGen::noiseInit(long seed)
+// {
+//   mountainTerrain.SetSeed(seed);
+//   mountainTerrain.SetFrequency(0.005);
+//   mountainTerrain.SetOctaveCount(5);
+// 
+//   mountainScale.SetSourceModule(0, mountainTerrain);
+//   mountainScale.SetScale(-1.0);
+//   mountainScale.SetBias(- (1.0 / 128) * 13);
+// 
+//   baseFlatTerrain.SetSeed(seed);
+//   baseFlatTerrain.SetFrequency(0.005);
+//   baseFlatTerrain.SetOctaveCount(5);
+//   baseFlatTerrain.SetPersistence(0.5);
+// 
+//   flatTerrain.SetSourceModule(0, baseFlatTerrain);
+//   flatTerrain.SetScale(0.125);
+//   flatTerrain.SetBias(0.05);
+// 
+//   terrainType.SetSeed(seed);
+//   terrainType.SetFrequency(0.005);
+//   terrainType.SetOctaveCount(4);
+//   terrainType.SetPersistence(0.5);
+// 
+//   terrainSelector.SetSourceModule(0, flatTerrain);
+//   terrainSelector.SetSourceModule(1, mountainScale);
+//   terrainSelector.SetControlModule(terrainType);
+//   terrainSelector.SetBounds(0.5, 1000.0);
+//   terrainSelector.SetEdgeFalloff(0.125);
+// 
+//   finalTerrain.SetSourceModule(0, terrainSelector);
+//   finalTerrain.SetScale(62);
+//   finalTerrain.SetBias(62);
+//   return true;
+// }
 
-  mountainScale.SetSourceModule(0, mountainTerrain);
-  mountainScale.SetScale(-1.0);
-  mountainScale.SetBias(- (1.0 / 128) * 13);
-
-  baseFlatTerrain.SetSeed(seed);
-  baseFlatTerrain.SetFrequency(0.005);
-  baseFlatTerrain.SetOctaveCount(5);
-  baseFlatTerrain.SetPersistence(0.5);
-
-  flatTerrain.SetSourceModule(0, baseFlatTerrain);
-  flatTerrain.SetScale(0.125);
-  flatTerrain.SetBias(0.05);
-
-  terrainType.SetSeed(seed);
-  terrainType.SetFrequency(0.005);
-  terrainType.SetOctaveCount(4);
-  terrainType.SetPersistence(0.5);
-
-  terrainSelector.SetSourceModule(0, flatTerrain);
-  terrainSelector.SetSourceModule(1, mountainScale);
-  terrainSelector.SetControlModule(terrainType);
-  terrainSelector.SetBounds(0.5, 1000.0);
-  terrainSelector.SetEdgeFalloff(0.125);
-
-  finalTerrain.SetSourceModule(0, terrainSelector);
-  finalTerrain.SetScale(62);
-  finalTerrain.SetBias(62);
-}
-/* Tim's code
+//  Tim's code
 bool worldGeneration::terrainGen::noiseInit(long seed)//libnoise uses int while seed is long not to sure what i should do here
 {
   using namespace noise;
@@ -257,10 +259,10 @@ bool worldGeneration::terrainGen::noiseInit(long seed)//libnoise uses int while 
   finalSelector.SetSourceModule(1,mountainScale);
   finalSelector.SetControlModule (finalType);
   finalSelector.SetBounds (0.4, 1000.0);
-  finalSelector.SetEdgeFalloff(0.125);  *-/
+  finalSelector.SetEdgeFalloff(0.125);  */
 
   return true;
-}*/
+}
 
 int32_t (&worldGeneration::terrainGen::noiseWrite( int32_t(&heightMap)[16][16], int32_t cX,int32_t cZ))[16][16]
 {
@@ -272,9 +274,9 @@ int32_t (&worldGeneration::terrainGen::noiseWrite( int32_t(&heightMap)[16][16], 
   {
     for(int32_t z=0;z<16;z++)
     {
-      heightMap[x][z] = (int32_t)(finalTerrain.GetValue(xBlockpos +x, 0, zBlockpos + z));
+      //heightMap[x][z] = (int32_t)(finalTerrain.GetValue(xBlockpos +x, 0, zBlockpos + z));
       // Tim's code
-      //heightMap[x][z] = (int32_t)(mountainSelect.GetValue(xBlockpos +x, 0, zBlockpos + z));
+      heightMap[x][z] = (int32_t)(mountainSelect.GetValue(xBlockpos +x, 0, zBlockpos + z));
     }
   }
   return heightMap;

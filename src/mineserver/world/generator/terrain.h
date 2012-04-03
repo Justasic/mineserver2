@@ -38,7 +38,7 @@ namespace worldGeneration
   {
 
     noise::module::RidgedMulti mountainTerrain;
-    noise::module::ScaleBias mountainScale;
+//     noise::module::ScaleBias mountainScale;
     noise::module::Billow baseFlatTerrain;
     noise::module::ScaleBias flatTerrain;
     noise::module::Perlin terrainType;

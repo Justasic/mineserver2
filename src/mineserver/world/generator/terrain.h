@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /*
  * Copyright (c) 2011-2012, The Mineserver Project
  * All rights reserved.
@@ -26,8 +25,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-=======
->>>>>>> tim/master
 /*This will generate all the terrain for
 the map. This includes mountains and flats
 ect. I am going to use libnoise for now.*/

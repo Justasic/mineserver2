@@ -31,7 +31,6 @@ ect. I am going to use libnoise for now.*/
 
 #include <mineserver/world/generator/terrain.h>
 
-<<<<<<< HEAD
 bool worldGeneration::terrainGen::noiseInit(long seed)
 {
   mountainTerrain.SetSeed(seed);

@@ -99,7 +99,8 @@ void HandleSegfault()
 // TODO: On signal event: close active connections, save world (when implemented), etc.
 void SignalHandler(int sig)
 {
-  switch(sig){
+  switch(sig)
+  {
     case SIGHUP:
       signal(sig, SIG_IGN);
       /* TODO: Rehash a config? hmmnn */

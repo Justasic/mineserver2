@@ -204,7 +204,8 @@ void Mineserver::Game::messageWatcherLogin(Mineserver::Game::pointer_t game, Min
   std::cout << "Player login v." << msg->version << ": " << msg->username << std::endl;
 
   Mineserver::Game_Player::pointer_t player;
-  if (m_players.find(msg->username) == m_players.end()) {
+  if (m_players.find(msg->username) == m_players.end())
+  {
     player = boost::make_shared<Mineserver::Game_Player>();
     player->setName(msg->username);
     player->setEid(getNextEid());
@@ -214,14 +215,22 @@ void Mineserver::Game::messageWatcherLogin(Mineserver::Game::pointer_t game, Min
     player->getPosition().stance = player->getPosition().y + 1.62;
     player->getPosition().onGround = true;
     addPlayer(player);
-  } else {
+  } else
     player = m_players[msg->username];
-  }
 
   associateClient(client, player);
 
-  if(msg->version != PROTOCOL_VERSION)
+  // FIXME: This needs to be moved somewhere else so the player doesn't hang on connect as long
+  if (msg->version > PROTOCOL_VERSION)
+  {
+    client->Kick("Your client version is not supported by this server!");
+    return; // don't allow the rest of the function to process, it can hang the client
+  }
+  else if (msg->version < PROTOCOL_VERSION)
+  {
     client->Kick("Your client is outdated!");
+    return;
+  }
   
   boost::shared_ptr<Mineserver::Network_Message_Login> loginMessage = boost::make_shared<Mineserver::Network_Message_Login>();
   loginMessage->mid = 0x01;
@@ -236,8 +245,10 @@ void Mineserver::Game::messageWatcherLogin(Mineserver::Game::pointer_t game, Min
   loginMessage->maxPlayers = 32; // this determines how many slots the tab window will have
   client->outgoing().push_back(loginMessage);
 
-  for (int x = -5; x <= 5; ++x) {
-    for (int z = -5; z <= 5; ++z) {
+  for (int x = -5; x <= 5; ++x)
+  {
+    for (int z = -5; z <= 5; ++z)
+    {
       boost::shared_ptr<Mineserver::Network_Message_ChunkPrepare> chunkPrepareMessage = boost::make_shared<Mineserver::Network_Message_ChunkPrepare>();
       chunkPrepareMessage->mid = 0x32;
       chunkPrepareMessage->x = x;
@@ -247,8 +258,10 @@ void Mineserver::Game::messageWatcherLogin(Mineserver::Game::pointer_t game, Min
     }
   }
 
-  for (int x = -5; x <= 5; ++x) {
-    for (int z = -5; z <= 5; ++z) {
+  for (int x = -5; x <= 5; ++x)
+  {
+    for (int z = -5; z <= 5; ++z)
+    {
       boost::shared_ptr<Mineserver::Network_Message_Chunk> chunkMessage = boost::make_shared<Mineserver::Network_Message_Chunk>();
       chunkMessage->mid = 0x33;
       chunkMessage->posX = x * 16;

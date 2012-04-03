@@ -29,6 +29,8 @@
 the generation will start from here and it
 should keep everything together*/
 #include <vector>
+#include <iostream>
+
 
 #include <boost/shared_ptr.hpp>
 

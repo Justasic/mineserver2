@@ -30,6 +30,7 @@
 
 #include <mineserver/byteorder.h>
 #include <mineserver/network/message.h>
+#include <string>
 
 namespace Mineserver
 {

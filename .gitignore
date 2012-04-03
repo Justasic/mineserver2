@@ -1,3 +1,4 @@
+/docs
 /bin
 /obj
 /CMakeCache.txt
@@ -9,3 +10,9 @@
 /src/cmake_install.cmake
 /src/mineserver/sysconfig.h
 *~
+.cproject
+.project
+Doxyfile
+br
+mineserver-logo-preview.png
+nbproject/

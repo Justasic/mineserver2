@@ -131,6 +131,7 @@ SET(mineserver_source
   src/mineserver/game.cpp
   src/mineserver/signal.cpp
   src/mineserver/game/player.cpp
+  src/mineserver/game/command.cpp
   src/mineserver/localization.cpp
   src/mineserver/network/server.cpp
   src/mineserver/network/client.cpp

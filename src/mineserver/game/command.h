@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2011-2012, The Mineserver Project
+  Copyright (c) 2012, The Mineserver Project
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -24,27 +24,31 @@
   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+#include <string>
+#include <vector>
+#include <mineserver/game/player.h>
+#include <mineserver/game.h>
+#include <mineserver/network/client.h>
+#include <boost/make_shared.hpp>
+#include <boost/enable_shared_from_this.hpp>
+#ifndef COMMAND_H
+#define	COMMAND_H
 
-#include <mineserver/byteorder.h>
-#include <mineserver/network/message/0x15.h>
-#include <mineserver/network/protocol/notch/packet.h>
-#include <mineserver/network/protocol/notch/packet/0x15.h>
-
-int Mineserver::Network_Protocol_Notch_Packet_0x15::_read(Mineserver::Network_Protocol_Notch_PacketStream& ps, Mineserver::Network_Message** message)
+namespace Mineserver 
 {
-  Mineserver::Network_Message_0x15* msg = new Mineserver::Network_Message_0x15;
-  *message = msg;
-
-  ps >> msg->mid >> msg->entityId >> msg->itemId >> msg->count >> msg->data >> msg->x >> msg->y >> msg->z >> msg->rotation >> msg->pitch >> msg->roll;
-
-  return STATE_GOOD;
+  class Command : public boost::enable_shared_from_this<Mineserver::Command> {
+  public:
+    Command(std::string cmd, boost::shared_ptr<Mineserver::Network_Client> m_client, boost::shared_ptr<Mineserver::Game_Player> m_player, bool ig);
+    void execute(Mineserver::Game::pointer_t game, Mineserver::Game::clientList_t, Mineserver::Network_Client::pointer_t client);
+    virtual ~Command();
+  private:
+    bool inGame;
+    std::string command;
+    std::vector<std::string> args;
+    int argc;
+    boost::shared_ptr<Mineserver::Game_Player> m_player;
+    boost::shared_ptr<Mineserver::Network_Client> m_client;
+  };
 }
 
-int Mineserver::Network_Protocol_Notch_Packet_0x15::_write(Mineserver::Network_Protocol_Notch_PacketStream& ps, const Mineserver::Network_Message& message)
-{
-  const Mineserver::Network_Message_0x15* msg = static_cast<const Mineserver::Network_Message_0x15*>(&message);
-
-  ps << msg->mid << msg->entityId << msg->itemId << msg->count << msg->data << msg->x << msg->y << msg->z << msg->rotation << msg->pitch << msg->roll;
-
-  return STATE_GOOD;
-}
+#endif

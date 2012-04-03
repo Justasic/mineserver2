@@ -110,6 +110,8 @@ bool Mineserver::mapGen::processChunk(Mineserver::World_Chunk::pointer_t tempChu
 {
   chunk = tempChunk;
 
+  std::cout << "processing chunk\n";
+
   terrain_v[0]->noiseWrite(heightMap,chunkX,chunkZ);
   writeLandscape();
 

@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2011-2012, The Mineserver Project
+  Copyright (c) 2011, The Mineserver Project
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -25,26 +25,20 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#ifndef MINESERVER_NETWORK_PACKET_0x08_H
+#define MINESERVER_NETWORK_PACKET_0x08_H
+
 #include <mineserver/byteorder.h>
-#include <mineserver/network/message/0x15.h>
-#include <mineserver/network/protocol/notch/packet.h>
-#include <mineserver/network/protocol/notch/packet/0x15.h>
+#include <mineserver/network/message.h>
 
-int Mineserver::Network_Protocol_Notch_Packet_0x15::_read(Mineserver::Network_Protocol_Notch_PacketStream& ps, Mineserver::Network_Message** message)
+namespace Mineserver
 {
-  Mineserver::Network_Message_0x15* msg = new Mineserver::Network_Message_0x15;
-  *message = msg;
-
-  ps >> msg->mid >> msg->entityId >> msg->itemId >> msg->count >> msg->data >> msg->x >> msg->y >> msg->z >> msg->rotation >> msg->pitch >> msg->roll;
-
-  return STATE_GOOD;
+  struct Network_Message_UpdateHealth : public Mineserver::Network_Message
+  {
+    int16_t health;
+    int16_t food;
+    float foodSaturation;
+  };
 }
 
-int Mineserver::Network_Protocol_Notch_Packet_0x15::_write(Mineserver::Network_Protocol_Notch_PacketStream& ps, const Mineserver::Network_Message& message)
-{
-  const Mineserver::Network_Message_0x15* msg = static_cast<const Mineserver::Network_Message_0x15*>(&message);
-
-  ps << msg->mid << msg->entityId << msg->itemId << msg->count << msg->data << msg->x << msg->y << msg->z << msg->rotation << msg->pitch << msg->roll;
-
-  return STATE_GOOD;
-}
+#endif

@@ -350,10 +350,7 @@ void Mineserver::Game::messageWatcherPosition(Mineserver::Game::pointer_t game, 
     {
       Mineserver::World::pointer_t world = getWorld(0);
 
-      boost::shared_ptr<Mineserver::Network_Message_Chat> chatMessage = boost::make_shared<Mineserver::Network_Message_Chat>();
-      chatMessage->mid = 0x03;
-      chatMessage->message += "You changed chunk";
-      client->outgoing().push_back(chatMessage);
+//       client->Message("You changed chunk");
 
       for(int32_t tempX = chunkX - 5;tempX<chunkX+5;tempX++)
       {
